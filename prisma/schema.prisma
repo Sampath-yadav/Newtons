@@ -1,0 +1,120 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id            Int            @id @default(autoincrement())
+  name          String
+  email         String         @unique
+  password      String
+  role          String         // "teacher" | "admin"
+  createdAt     DateTime       @default(now())
+  exams         Exam[]
+  auditLogs     AuditLog[]
+  teacherAlerts TeacherAlert[]
+}
+
+model Student {
+  id              Int            @id @default(autoincrement())
+  admissionNumber String         @unique
+  name            String
+  class           String         // "8" | "9" | "10"
+  section         String         // "A" | "B" | "C"
+  parentPhone     String
+  createdAt       DateTime       @default(now())
+  marks           Mark[]
+  resultTokens    ResultToken[]
+  notifications   Notification[]
+}
+
+// status: "draft" | "pending_approval" | "published" | "rejected"
+model Exam {
+  id           Int           @id @default(autoincrement())
+  name         String        // "FA-1" | "FA-2" | "SA-1" | "SA-2"
+  class        String
+  section      String
+  status       String        @default("draft")
+  uploadedById Int
+  uploadedBy   User          @relation(fields: [uploadedById], references: [id])
+  rejectNote   String?
+  publishedAt  DateTime?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  marks         Mark[]
+  resultTokens  ResultToken[]
+  auditLogs     AuditLog[]
+  teacherAlerts TeacherAlert[]
+  notifications Notification[]
+}
+
+model Mark {
+  id        Int      @id @default(autoincrement())
+  studentId Int
+  student   Student  @relation(fields: [studentId], references: [id])
+  examId    Int
+  exam      Exam     @relation(fields: [examId], references: [id])
+  subject   String
+  value     String   // "85" or "AB" for absent
+
+  @@unique([studentId, examId, subject])
+}
+
+model ResultToken {
+  id        Int      @id @default(autoincrement())
+  token     String   @unique
+  studentId Int
+  student   Student  @relation(fields: [studentId], references: [id])
+  examId    Int
+  exam      Exam     @relation(fields: [examId], references: [id])
+  createdAt DateTime @default(now())
+}
+
+// channel: "whatsapp" | "sms"
+// status: "pending" | "sent" | "delivered" | "failed" | "skipped"
+// type:   "result" | "attendance" | "announcement"
+model Notification {
+  id           Int       @id @default(autoincrement())
+  studentId    Int
+  student      Student   @relation(fields: [studentId], references: [id])
+  examId       Int?
+  exam         Exam?     @relation(fields: [examId], references: [id])
+  type         String    @default("result")
+  channel      String
+  status       String    @default("pending")
+  providerSid  String?   // Twilio message SID
+  toNumber     String?   // actual E.164 number the message was sent to
+  errorCode    String?   // Twilio error code on failure
+  errorMessage String?   // human-readable failure / fallback reason
+  sentAt       DateTime?
+  deliveredAt  DateTime?
+  createdAt    DateTime  @default(now())
+}
+
+model AuditLog {
+  id        Int      @id @default(autoincrement())
+  examId    Int?
+  exam      Exam?    @relation(fields: [examId], references: [id])
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
+  action    String   // "upload" | "submit" | "approve" | "reject"
+  note      String?
+  createdAt DateTime @default(now())
+}
+
+// In-app alerts for teachers: created server-side when admin approves or rejects
+// type: "approved" | "rejected"
+model TeacherAlert {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
+  examId    Int
+  exam      Exam     @relation(fields: [examId], references: [id])
+  type      String   // "approved" | "rejected"
+  message   String
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+}

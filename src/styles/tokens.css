@@ -1,0 +1,12 @@
+:root {
+  --color-brand-orange: #f97316;
+  --color-brand-navy: #0f2a4a;
+  --color-brand-navy-light: #1a3d6b;
+  --color-brand-cream: #fdf6ee;
+
+  --radius-card: 1rem;
+  --radius-pill: 9999px;
+
+  --shadow-card: 0 2px 12px 0 rgb(0 0 0 / 0.08);
+  --shadow-card-hover: 0 6px 24px 0 rgb(0 0 0 / 0.12);
+}

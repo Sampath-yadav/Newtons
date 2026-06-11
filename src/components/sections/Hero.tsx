@@ -1,0 +1,92 @@
+// src/components/sections/Hero.tsx
+"use client";
+
+import { Button } from "../ui/Button";
+import { Container } from "../layout/Container";
+import { ExpandIcon } from "../icons";
+
+interface HeroProps {
+  /** Video path under /public. Place the file at public/videos/hero/campus.mp4 */
+  videoSrc?: string;
+  title?: string;
+  subtitle?: string;
+}
+
+/**
+ * Hero
+ * -----
+ * Full-bleed looping background video with a soft dark overlay, centered
+ * headline and two CTAs. A scroll cue sits bottom-left and a corner-launcher
+ * button bottom-right.
+ */
+export function Hero({
+  videoSrc = "/videos/hero/campus.mp4",
+  title = "Where confidence grows",
+  subtitle = "Growing the world's most curious, confident minds",
+}: HeroProps) {
+  return (
+    <section className="relative isolate overflow-hidden">
+      {/* Background video — fills the viewport below the sticky navbar */}
+      <div className="relative h-[calc(100dvh-80px)] w-full lg:h-[calc(100vh-100px)]">
+        <video
+          src={videoSrc}
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="absolute inset-0 h-full w-full object-cover"
+        />
+        {/* Dark overlay for legibility */}
+        <div
+          aria-hidden
+          className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/30 to-black/45"
+        />
+      </div>
+
+      {/* Overlay content */}
+      <Container className="absolute inset-0 flex flex-col items-center justify-center text-center text-white">
+        <h1 className="font-display text-4xl font-bold leading-tight drop-shadow-md sm:text-5xl lg:text-[56px]">
+          {title}
+        </h1>
+        <p className="mt-3 max-w-2xl text-base text-white/90 sm:text-lg">
+          {subtitle}
+        </p>
+
+        <div className="mt-7 flex flex-wrap items-center justify-center gap-3">
+          <Button href="/why-manthan" size="lg">
+            Why choose us
+          </Button>
+          <Button href="/book-a-tour" variant="outline-light" size="lg">
+            Book a tour
+          </Button>
+        </div>
+      </Container>
+
+      {/* Bottom-left scroll cue */}
+      <button
+        type="button"
+        aria-label="Scroll to next section"
+        onClick={() =>
+          typeof window !== "undefined" &&
+          window.scrollBy({ top: window.innerHeight * 0.7, behavior: "smooth" })
+        }
+        className="absolute bottom-5 left-5 z-10 grid h-9 w-9 place-items-center rounded-full border border-white/70 text-white backdrop-blur-sm transition hover:bg-white/15 sm:left-8"
+      >
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" className="animate-bob" aria-hidden>
+          <polyline points="6 9 12 15 18 9" />
+        </svg>
+      </button>
+
+      {/* Bottom-right corner launcher */}
+      <button
+        type="button"
+        aria-label="Open immersive view"
+        className="absolute bottom-5 right-5 z-10 grid h-9 w-9 place-items-center rounded-full border border-white/70 text-white backdrop-blur-sm transition hover:bg-white/15 sm:right-8"
+      >
+        <ExpandIcon width={14} height={14} />
+      </button>
+    </section>
+  );
+}
+
+export default Hero;
