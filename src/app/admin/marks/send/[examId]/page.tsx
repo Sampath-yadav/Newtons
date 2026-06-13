@@ -24,9 +24,8 @@ interface ResultsData {
 
 interface SendOutcome {
   ok: boolean;
-  channel: "whatsapp" | "sms" | null;
+  channel: "sms" | null;
   status: "sent" | "failed" | "skipped";
-  fellBack: boolean;
   to: string | null;
   error?: string;
 }
@@ -34,7 +33,7 @@ interface SendOutcome {
 // Per-student UI state for the send action.
 type SendState =
   | { state: "sending" }
-  | { state: "sent"; channel: string | null; fellBack: boolean }
+  | { state: "sent"; channel: string | null }
   | { state: "failed"; error?: string };
 
 export default function SendResultsPage() {
@@ -66,7 +65,7 @@ export default function SendResultsPage() {
       for (const r of payload.recipients) {
         const s = r.lastSent?.status;
         if (s === "sent" || s === "delivered") {
-          initial[r.studentId] = { state: "sent", channel: r.lastSent!.channel, fellBack: false };
+          initial[r.studentId] = { state: "sent", channel: r.lastSent!.channel };
         } else if (s === "failed") {
           initial[r.studentId] = { state: "failed", error: "Previous attempt failed — resend to retry." };
         }
@@ -81,7 +80,7 @@ export default function SendResultsPage() {
 
   useEffect(() => { fetchResults(); }, [fetchResults]);
 
-  // Server-side send for one student (WhatsApp first, SMS fallback handled server-side).
+  // Server-side SMS send for one student.
   const sendOne = useCallback(async (studentId: number): Promise<SendOutcome | null> => {
     setStatusMap((p) => ({ ...p, [studentId]: { state: "sending" } }));
     try {
@@ -92,7 +91,7 @@ export default function SendResultsPage() {
       });
       const outcome = (await res.json()) as SendOutcome & { error?: string };
       if (outcome.ok) {
-        setStatusMap((p) => ({ ...p, [studentId]: { state: "sent", channel: outcome.channel, fellBack: outcome.fellBack } }));
+        setStatusMap((p) => ({ ...p, [studentId]: { state: "sent", channel: outcome.channel } }));
       } else {
         setStatusMap((p) => ({ ...p, [studentId]: { state: "failed", error: outcome.error ?? "Send failed." } }));
       }
@@ -107,7 +106,7 @@ export default function SendResultsPage() {
   // each call sends the next batch and reports how many remain, so 600 parents
   // never hit a single-request timeout, already-sent parents are skipped, and a
   // re-click retries only the failures. Resumable — server is the source of truth.
-  type BatchResult = { studentId: number; ok: boolean; channel: string | null; status: string; fellBack: boolean; error?: string };
+  type BatchResult = { studentId: number; ok: boolean; channel: string | null; status: string; error?: string };
 
   async function sendAll() {
     if (!examId) return;
@@ -138,7 +137,7 @@ export default function SendResultsPage() {
           const next = { ...p };
           for (const r of json.results as BatchResult[]) {
             next[r.studentId] = r.ok
-              ? { state: "sent", channel: r.channel, fellBack: r.fellBack }
+              ? { state: "sent", channel: r.channel }
               : { state: "failed", error: r.error ?? (r.status === "skipped" ? "Skipped." : "Send failed.") };
           }
           return next;
@@ -220,7 +219,7 @@ export default function SendResultsPage() {
               <div>
                 <h1 className="text-2xl font-extrabold text-[#1F2A66]">{data.exam.name} — Class {data.exam.class}{data.exam.section}</h1>
                 <p className="mt-1 text-[13px] text-slate-500">
-                  Sends the secure result link to each parent over WhatsApp, automatically falling back to SMS if WhatsApp fails. No login needed on the parent&apos;s side.
+                  Sends the secure result link to each parent by SMS. No login needed on the parent&apos;s side.
                 </p>
                 {allSummary && <p className="mt-2 text-[13px] font-semibold text-[#060C8B]">{allSummary}</p>}
               </div>
@@ -274,7 +273,7 @@ export default function SendResultsPage() {
                         <button
                           onClick={() => sendOne(r.studentId)}
                           disabled={st?.state === "sending" || sendingAll}
-                          className="inline-flex items-center gap-1.5 rounded-lg bg-[#25D366] px-3.5 py-2 text-[12px] font-bold text-white hover:bg-[#1ebe5a] disabled:opacity-50 transition-colors"
+                          className="inline-flex items-center gap-1.5 rounded-lg bg-[#060C8B] px-3.5 py-2 text-[12px] font-bold text-white hover:bg-[#04096a] disabled:opacity-50 transition-colors"
                         >
                           {st?.state === "sending" ? (
                             <><span className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-white/40 border-t-white" />Sending…</>
@@ -322,9 +321,7 @@ function StatusPill({ state }: { state: SendState | undefined }) {
     );
   }
   if (state.state === "sent") {
-    const label = state.channel === "sms"
-      ? (state.fellBack ? "Sent via SMS (fallback)" : "Sent via SMS")
-      : "Sent via WhatsApp";
+    const label = "Sent via SMS";
     return (
       <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-emerald-600 border border-emerald-100">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="h-2.5 w-2.5" aria-hidden><polyline points="20 6 9 17 4 12" /></svg>

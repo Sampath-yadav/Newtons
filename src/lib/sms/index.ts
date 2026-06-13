@@ -16,11 +16,6 @@ const noopProvider: SmsProvider = {
     console.log(`[sms:noop] would send SMS to ${to}`);
     return { providerSid: `noop-${Date.now()}-${noopCounter}`, status: "sent" };
   },
-  async sendWhatsApp({ to }: SmsMessage): Promise<SmsSendResult> {
-    noopCounter += 1;
-    console.log(`[sms:noop] would send WhatsApp to ${to}`);
-    return { providerSid: `noop-${Date.now()}-${noopCounter}`, status: "sent" };
-  },
 };
 
 // Resolve the active provider:

@@ -34,6 +34,4 @@ export class SmsError extends Error {
 export interface SmsProvider {
   readonly name: string;
   sendSms(msg: SmsMessage): Promise<SmsSendResult>;
-  /** Optional — providers without WhatsApp simply omit it (caller falls back to SMS). */
-  sendWhatsApp?(msg: SmsMessage): Promise<SmsSendResult>;
 }

@@ -77,7 +77,7 @@ model ResultToken {
   @@unique([examId, studentId])
 }
 
-// channel: "whatsapp" | "sms"
+// channel: "sms"
 // status: "pending" | "sent" | "delivered" | "failed" | "skipped"
 // type:   "result" | "attendance" | "announcement"
 model Notification {

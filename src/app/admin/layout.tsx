@@ -7,7 +7,7 @@ export default function AdminLayout({
 }) {
   return (
     <Providers>
-      <div className="min-h-screen bg-[#f8fafc]">{children}</div>
+      <div className="bg-[#f8fafc]">{children}</div>
     </Providers>
   );
 }

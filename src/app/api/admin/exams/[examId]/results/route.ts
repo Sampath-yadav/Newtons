@@ -4,8 +4,8 @@ import { prisma } from "~/lib/prisma";
 import { isTestMode } from "~/lib/notifications";
 
 // Lists the per-student parent result links for a PUBLISHED exam, so the admin
-// can dispatch them via WhatsApp / SMS. Returns the secure token URL plus the
-// most recent notification status for each student.
+// can dispatch them via SMS. Returns the secure token URL plus the most recent
+// notification status for each student.
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ examId: string }> }

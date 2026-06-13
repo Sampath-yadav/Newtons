@@ -1,7 +1,8 @@
 // src/components/ui/FeatureCard.tsx
 "use client";
 
-import type { ComponentType, ReactNode, SVGProps } from "react";
+import type { ReactNode } from "react";
+import type { LucideIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import type { FeatureTheme } from "~/data/welcomeFeatures";
@@ -11,8 +12,8 @@ import type { FeatureTheme } from "~/data/welcomeFeatures";
 interface FeatureCardProps {
   /** Unique feature id. */
   id: string;
-  /** Icon component rendered inside the floating circle. */
-  icon: ComponentType<SVGProps<SVGSVGElement>>;
+  /** Lucide icon rendered inside the floating badge. */
+  icon: LucideIcon;
   title: string;
   /** Body copy — supports inline JSX. */
   body: ReactNode;
@@ -72,16 +73,31 @@ export function FeatureCard({
 
       {/* ── Content zone ───────────────────────────────────────────────── */}
       <div className="relative flex flex-1 flex-col px-5 pb-5 sm:px-6 sm:pb-6">
-        {/* Floating icon circle — straddles the image / content boundary */}
+        {/* Floating icon badge — layered "squircle" that straddles the
+            image / content boundary. Outer tile: soft top-light gradient + a
+            brand-tinted glow shadow + crisp white halo so it pops against the
+            photo. Inner tile: subtle inset for depth. */}
         <div
-          className="relative z-10 -mt-7 mb-4 flex h-14 w-14 shrink-0 items-center justify-center rounded-full shadow-[0_4px_12px_rgba(0,0,0,0.12)] ring-4 ring-white"
-          style={{ backgroundColor: theme.iconBg }}
+          className="relative z-10 -mt-8 mb-4 flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl ring-[3px] ring-white"
+          style={{
+            background: `linear-gradient(145deg, #ffffff 0%, ${theme.iconBg} 100%)`,
+            boxShadow: `0 10px 22px -8px ${theme.accent}66, 0 2px 6px rgba(15,23,42,0.08)`,
+          }}
         >
-          <Icon
-            width={28}
-            height={28}
-            style={{ color: theme.iconColor, stroke: theme.iconColor }}
-          />
+          <span
+            className="flex h-[46px] w-[46px] items-center justify-center rounded-xl"
+            style={{
+              background: `linear-gradient(160deg, ${theme.iconBg} 0%, #ffffff 130%)`,
+              boxShadow: `inset 0 1px 1px rgba(255,255,255,0.9), inset 0 -1px 2px ${theme.accent}22`,
+            }}
+          >
+            <Icon
+              size={24}
+              strokeWidth={2}
+              style={{ color: theme.iconColor }}
+              aria-hidden
+            />
+          </span>
         </div>
 
         {/* Title */}

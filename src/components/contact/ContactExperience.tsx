@@ -34,7 +34,7 @@ function Eyebrow({ children }: { children: React.ReactNode }) {
 const QUICK = [
   { icon: "phone" as const, label: "Call Us", value: PHONE, sub: "Mon–Sat, 8 AM – 4 PM", href: `tel:${PHONE.replace(/[^0-9+]/g, "")}` },
   { icon: "mail" as const, label: "Email Us", value: EMAIL, sub: "We reply within 24 hours", href: `mailto:${EMAIL}` },
-  { icon: "pin" as const, label: "Visit Us", value: "Tellapur, Hyderabad", sub: "Sangareddy District, 502032", href: "#map" },
+  { icon: "pin" as const, label: "Visit Us", value: "Tellapur, Hyderabad", sub: "Sangareddy District, 502032", href: MAP_LINK },
 ];
 
 const USEFUL = [
@@ -81,7 +81,13 @@ export function ContactExperience() {
         <Container>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
             {QUICK.map((q) => (
-              <a key={q.label} href={q.href} className="group flex items-center gap-4 rounded-2xl border border-slate-100 bg-white p-5 shadow-card transition-all hover:-translate-y-1 hover:border-brand-orange/30 hover:shadow-card-lg">
+              <a
+                key={q.label}
+                href={q.href}
+                target={q.href.startsWith("http") ? "_blank" : undefined}
+                rel={q.href.startsWith("http") ? "noopener noreferrer" : undefined}
+                className="group flex items-center gap-4 rounded-2xl border border-slate-100 bg-white p-5 shadow-card transition-all hover:-translate-y-1 hover:border-brand-orange/30 hover:shadow-card-lg"
+              >
                 <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-brand-navy/6 text-brand-navy transition-colors group-hover:bg-brand-navy group-hover:text-white">
                   <Ico name={q.icon} />
                 </span>
@@ -100,34 +106,34 @@ export function ContactExperience() {
       <section id="map" className="scroll-mt-24 bg-white pb-16 lg:pb-24">
         <Container>
           <div className="grid grid-cols-1 overflow-hidden rounded-3xl border border-slate-100 shadow-card-lg lg:grid-cols-2">
-            {/* Map — fully interactive (scroll, zoom & pan inside the page) */}
+            {/* Map — tapping anywhere opens the school's location in Google Maps. */}
             <div className="relative min-h-[360px] lg:min-h-full">
               <iframe
                 title="Newton's High School location"
                 src={MAP_SRC}
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
-                className="absolute inset-0 h-full w-full"
+                className="pointer-events-none absolute inset-0 h-full w-full"
               />
-              {/* Floating shortcut → opens the full Google Maps view in a new tab.
-                  Sits above the map but only over its own area, so the rest of the
-                  map stays draggable/zoomable. */}
+              {/* Full-area click target → opens the exact Google Maps location. */}
               <a
                 href={MAP_LINK}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Open Newton's High School on Google Maps"
-                className="group absolute bottom-4 right-4 z-10 inline-flex items-center gap-2 rounded-full bg-white/95 px-4 py-2 text-[13px] font-bold text-brand-navy shadow-lg ring-1 ring-black/5 transition hover:bg-brand-orange hover:text-white"
+                className="group absolute inset-0 z-10 flex items-end justify-end p-4"
               >
-                <Ico name="pin" className="h-4 w-4" />
-                View on Google Maps
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" className="h-3.5 w-3.5" aria-hidden>
-                  <path d="M7 17 17 7M9 7h8v8" />
-                </svg>
+                <span className="inline-flex items-center gap-2 rounded-full bg-white/95 px-4 py-2 text-[13px] font-bold text-brand-navy shadow-lg ring-1 ring-black/5 transition group-hover:bg-brand-orange group-hover:text-white">
+                  <Ico name="pin" className="h-4 w-4" />
+                  View on Google Maps
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" className="h-3.5 w-3.5" aria-hidden>
+                    <path d="M7 17 17 7M9 7h8v8" />
+                  </svg>
+                </span>
               </a>
             </div>
             {/* Form */}
-            <div className="bg-[#FFFBF5] p-7 sm:p-10">
+            <div id="enquiry" className="scroll-mt-24 bg-[#FFFBF5] p-7 sm:p-10">
               {sent ? (
                 <div className="flex h-full flex-col items-center justify-center py-12 text-center">
                   <span className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-brand-orange text-white">
@@ -158,7 +164,7 @@ export function ContactExperience() {
                   </Field>
                   <label className="flex items-start gap-3 text-[12px] leading-relaxed text-brand-muted">
                     <input required type="checkbox" checked={form.consent} onChange={set("consent")} className="mt-0.5 h-4 w-4 shrink-0 accent-brand-orange" />
-                    I acknowledge that I&apos;m sharing my contact information with Newton&apos;s High School and consent to being contacted via Phone, SMS, WhatsApp or Email.
+                    I acknowledge that I&apos;m sharing my contact information with Newton&apos;s High School and consent to being contacted via Phone, SMS or Email.
                   </label>
                   <button type="submit" className="w-full rounded-xl bg-brand-orange px-5 py-3.5 text-[15px] font-bold text-white shadow-cta transition-colors hover:bg-[#e08500]">Submit Enquiry</button>
                   <p className="text-center text-[11px] text-slate-400">🔒 Your details are kept private and never shared.</p>

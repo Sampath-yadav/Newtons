@@ -4,6 +4,7 @@ import { useState } from "react";
 import { signIn, getSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { Container } from "~/components/layout/Container";
 
 export default function TeacherLoginPage() {
   const router = useRouter();
@@ -17,27 +18,45 @@ export default function TeacherLoginPage() {
     setLoading(true);
     setError("");
 
-    const result = await signIn("credentials", {
-      email,
-      password,
-      redirect: false,
-    });
+    try {
+      const result = await signIn("credentials", {
+        email,
+        password,
+        redirect: false,
+      });
 
-    if (result?.error) {
-      setError("Invalid email or password. Please try again.");
+      // Wrong credentials, or the auth endpoint returned an error.
+      if (!result || !result.ok || result.error) {
+        setError("Invalid email or password. Please try again.");
+        return;
+      }
+
+      // Credentials were accepted — confirm the session actually persisted.
+      // If it didn't, the deployment's NEXTAUTH_URL/NEXTAUTH_SECRET is almost
+      // certainly misconfigured (e.g. NEXTAUTH_URL still pointing at localhost).
+      const session = await getSession();
+      if (!session) {
+        console.error("[teacher-login] sign-in succeeded but no session was created — check NEXTAUTH_URL/NEXTAUTH_SECRET in the deployment environment.");
+        setError("Signed in, but the session could not be created. Please contact the administrator.");
+        return;
+      }
+
+      // Route by role. Middleware also enforces this, so admins are sent on.
+      const role = (session.user as { role?: string } | undefined)?.role;
+      router.push(role === "admin" ? "/admin/marks" : "/teacher/upload");
+    } catch (err) {
+      console.error("[teacher-login] authentication flow failed:", err);
+      setError("Couldn't sign you in right now. Please try again in a moment.");
+    } finally {
+      // Always clear the loading state so the button never sticks on "Signing in…".
       setLoading(false);
-      return;
     }
-
-    // Route by role: admins land on the Admin Dashboard, teachers on Upload.
-    const session = await getSession();
-    const role = (session?.user as { role?: string } | undefined)?.role;
-    router.push(role === "admin" ? "/admin/marks" : "/teacher/upload");
   }
 
   return (
-    <section className="flex min-h-screen items-center justify-center bg-[#f8fafc] px-4 py-12">
-      <div className="mx-auto w-full max-w-md">
+    <section className="bg-[#f8fafc] py-12 lg:py-20">
+      <Container>
+        <div className="mx-auto max-w-md">
         {/* Heading */}
         <div className="mb-8 text-center">
           <Image
@@ -110,7 +129,8 @@ export default function TeacherLoginPage() {
         <p className="mt-6 text-center text-[12px] text-slate-500">
           For access issues, contact your school administrator.
         </p>
-      </div>
+        </div>
+      </Container>
     </section>
   );
 }

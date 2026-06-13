@@ -140,7 +140,7 @@ export default function AdminMarksPage() {
   return (
     <div className="min-h-screen bg-[#f8fafc]">
       {/* Header */}
-      <header className="border-b border-slate-200 bg-white px-6 py-4">
+      <header className="border-b border-slate-200 bg-white px-4 py-3.5 sm:px-6 sm:py-4">
         <div className="mx-auto flex max-w-7xl items-center justify-between">
           <div className="flex items-center gap-3">
             <Image src="/images/school_logo/Newtons_logo.png" alt="Newton's" width={100} height={34} />
@@ -162,16 +162,28 @@ export default function AdminMarksPage() {
         </div>
       </header>
 
+      {/* Sub-nav */}
+      <div className="border-b border-slate-200 bg-white px-4 sm:px-6">
+        <div className="mx-auto flex max-w-7xl gap-1">
+          <span className="border-b-2 border-[#060C8B] px-3 py-3 text-[13px] font-semibold text-[#060C8B]">
+            Mark Approvals
+          </span>
+          <Link href="/admin/students" className="border-b-2 border-transparent px-3 py-3 text-[13px] font-medium text-slate-500 hover:text-slate-800 transition-colors">
+            Students
+          </Link>
+        </div>
+      </div>
+
       <div className="mx-auto max-w-7xl px-4 py-8">
         {/* Page title + refresh */}
-        <div className="mb-6 flex items-center justify-between">
+        <div className="mb-6 flex items-start justify-between gap-3">
           <div>
-            <h1 className="text-2xl font-extrabold text-[#1F2A66]">Mark Sheet Approvals</h1>
+            <h1 className="text-xl font-extrabold text-[#1F2A66] sm:text-2xl">Mark Sheet Approvals</h1>
             <p className="mt-0.5 text-[13px] text-slate-400">Review, approve, or reject mark sheets submitted by teachers.</p>
           </div>
           <button
             onClick={fetchExams}
-            className="flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-[12px] text-slate-500 hover:bg-slate-50 transition-colors"
+            className="flex shrink-0 items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-[12px] text-slate-500 hover:bg-slate-50 transition-colors"
           >
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-3.5 w-3.5" aria-hidden><polyline points="23 4 23 10 17 10" /><polyline points="1 20 1 14 7 14" /><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15" /></svg>
             Refresh
@@ -179,22 +191,22 @@ export default function AdminMarksPage() {
         </div>
 
         {/* Summary stat cards */}
-        <div className="mb-8 grid grid-cols-2 gap-4 sm:grid-cols-4">
+        <div className="mb-6 grid grid-cols-2 gap-3 sm:mb-8 sm:grid-cols-4 sm:gap-4">
           {[
             { label: "Pending Reviews",   value: pendingCount,        color: "text-amber-600",   icon: "⏳", bg: "bg-amber-50 border-amber-100"    },
             { label: "Published Today",   value: publishedTodayCount, color: "text-emerald-600", icon: "✓",  bg: "bg-emerald-50 border-emerald-100" },
             { label: "Rejected Today",    value: rejectedTodayCount,  color: "text-red-600",     icon: "✕",  bg: "bg-red-50 border-red-100"         },
             { label: "Total Published",   value: totalPublished,      color: "text-[#060C8B]",   icon: "★",  bg: "bg-blue-50 border-blue-100"       },
           ].map((s) => (
-            <div key={s.label} className={`rounded-2xl border p-5 ${s.bg}`}>
-              <p className={`text-3xl font-extrabold ${s.color}`}>{s.value}</p>
+            <div key={s.label} className={`rounded-2xl border p-4 sm:p-5 ${s.bg}`}>
+              <p className={`text-2xl font-extrabold sm:text-3xl ${s.color}`}>{s.value}</p>
               <p className="mt-1.5 text-[12px] font-medium text-slate-600">{s.label}</p>
             </div>
           ))}
         </div>
 
         {/* Mobile filter pills */}
-        <div className="mb-4 flex lg:hidden gap-2 overflow-x-auto pb-1">
+        <div className="mb-4 flex lg:hidden gap-2 overflow-x-auto pb-3">
           {(["pending_approval", "published", "rejected", "all"] as FilterKey[]).map((f) => (
             <button
               key={f}

@@ -300,8 +300,8 @@ export function EnquiryForm() {
             I acknowledge that I am sharing my contact information with
             Newton&apos;s High School to learn more about my child&apos;s
             education. I consent to the Newton&apos;s School team reaching out
-            to me with further details via Phone Calls, Text Messages, WhatsApp
-            Messages, or Emails.{" "}
+            to me with further details via Phone Calls, Text Messages, or
+            Emails.{" "}
             <span className="text-red-500" aria-hidden>*</span>
           </span>
         </label>

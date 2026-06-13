@@ -29,18 +29,6 @@ export interface SendResult {
   status: string; // Twilio message status: queued | sent | ...
 }
 
-// Send a WhatsApp message. Throws on immediate API errors (bad number, sandbox
-// not joined, no WhatsApp capability) — the caller uses that to fall back to SMS.
-export async function sendWhatsApp({ to, body }: { to: string; body: string }): Promise<SendResult> {
-  const from = requireEnv("TWILIO_WHATSAPP_FROM");
-  const msg = await getClient().messages.create({
-    from: `whatsapp:${from}`,
-    to: `whatsapp:${to}`,
-    body,
-  });
-  return { sid: msg.sid, status: msg.status };
-}
-
 // Send a plain SMS. Throws on immediate API errors.
 export async function sendSMS({ to, body }: { to: string; body: string }): Promise<SendResult> {
   const from = requireEnv("TWILIO_SMS_FROM");

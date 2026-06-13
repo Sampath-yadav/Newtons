@@ -4,9 +4,8 @@ import { safeNormalizePhone } from "~/lib/phone";
 
 // High-level notification service.
 //
-// Delivery strategy: WhatsApp first, automatic SMS fallback if the WhatsApp
-// send throws immediately (bad number, sandbox not joined, no WA capability).
-// Every attempt is logged to the Notification table for tracking/accountability.
+// Delivery channel: SMS only. Every attempt is logged to the Notification table
+// for tracking/accountability.
 //
 // Test mode (NOTIFICATION_TEST_MODE=true): every message is redirected to
 // NOTIFICATION_TEST_NUMBER regardless of the parent number on the student, so
@@ -17,22 +16,14 @@ export type NotificationType = "result" | "attendance" | "announcement";
 
 export interface SendOutcome {
   ok: boolean;
-  channel: "whatsapp" | "sms" | null; // channel that actually delivered (or attempted)
+  channel: "sms" | null;               // "sms" when an attempt was made, null when skipped
   status: "sent" | "failed" | "skipped";
-  fellBack: boolean;                   // true if WhatsApp failed and SMS was used
   to: string | null;                   // E.164 number actually targeted
   error?: string;
 }
 
 export function isTestMode(): boolean {
   return process.env.NOTIFICATION_TEST_MODE === "true";
-}
-
-// Whether to attempt WhatsApp first. Set NOTIFICATION_WHATSAPP_ENABLED=false to
-// send SMS only (e.g. during trial testing without the WhatsApp sandbox).
-// Defaults to true so production keeps the WhatsApp-first → SMS-fallback flow.
-export function whatsAppEnabled(): boolean {
-  return process.env.NOTIFICATION_WHATSAPP_ENABLED !== "false";
 }
 
 // Normalise an Indian mobile number to E.164 (+91XXXXXXXXXX).
@@ -50,6 +41,50 @@ export function resolveDestination(parentPhone: string | null | undefined): stri
   return normalizeE164(parentPhone);
 }
 
+// ── Twilio free-trial allowlist ──────────────────────────────────────────────
+// A Twilio trial account can only message numbers verified in the Twilio
+// console. While SMS_ALLOWLIST is set (comma-separated E.164/Indian numbers),
+// the pipeline still resolves each student's REAL parentPhone from the database
+// — so unique links and the student↔parent mapping are exactly as in production
+// — but only DISPATCHES to numbers on the list; everyone else is logged as
+// "skipped". Clear SMS_ALLOWLIST to message every parent in production: no code
+// change, just an env change.
+export function getAllowlist(): string[] | null {
+  const raw = process.env.SMS_ALLOWLIST;
+  if (!raw) return null;
+  const list = raw
+    .split(",")
+    .map((s) => normalizeE164(s.trim()))
+    .filter((n): n is string => n !== null);
+  return list.length > 0 ? list : null;
+}
+
+export function isAllowedDestination(to: string): boolean {
+  const allow = getAllowlist();
+  if (!allow) return true; // no allowlist configured → full production behaviour
+  return allow.includes(to);
+}
+
+export interface SendTarget {
+  to: string | null;     // E.164 number to actually send to, or null if skipped
+  skipReason?: string;   // why it was skipped (recorded on the Notification row)
+}
+
+// Single place that turns a parent's stored phone into a final, gated send
+// target so the single-send and batch paths behave identically: test-mode
+// redirect → phone validation → trial allowlist check.
+export function resolveSendTarget(parentPhone: string | null | undefined): SendTarget {
+  const to = resolveDestination(parentPhone);
+  if (!to) return { to: null, skipReason: "No valid phone number to send to." };
+  if (!isAllowedDestination(to)) {
+    return {
+      to: null,
+      skipReason: "Recipient not in SMS_ALLOWLIST — skipped during Twilio trial (only verified numbers are messaged).",
+    };
+  }
+  return { to };
+}
+
 interface SendArgs {
   studentId: number;
   examId: number | null;
@@ -60,19 +95,17 @@ interface SendArgs {
 
 // Pure delivery result — what happened on the wire, with NO database writes.
 // The caller decides how to record it (single-send creates a row; the batch
-// updates its pre-created claim row). This keeps the WhatsApp→SMS fallback +
-// retry logic in one place and reusable.
+// updates its pre-created claim row). This keeps the SMS send + retry logic in
+// one place and reusable.
 export interface DeliveryResult {
   ok: boolean;
-  channel: "whatsapp" | "sms" | null;
+  channel: "sms" | null;
   providerSid: string | null;
-  fellBack: boolean;
   error?: string;
   errorCode?: string;
 }
 
-// Attempt delivery to an already-resolved E.164 number: WhatsApp first (if
-// enabled & supported), automatic SMS fallback, each wrapped in retry/backoff.
+// Send an SMS to an already-resolved E.164 number, wrapped in retry/backoff.
 // Does NOT touch the database.
 export async function deliverMessage(opts: {
   to: string;
@@ -82,56 +115,37 @@ export async function deliverMessage(opts: {
   const provider = getSmsProvider();
   const { to, body, idempotencyKey } = opts;
 
-  let waReason: string | null = null;
-  if (whatsAppEnabled() && provider.sendWhatsApp) {
-    try {
-      const res = await sendWithRetry(() => provider.sendWhatsApp!({ to, body, idempotencyKey }));
-      return { ok: true, channel: "whatsapp", providerSid: res.providerSid, fellBack: false };
-    } catch (waErr) {
-      waReason = errMessage(waErr);
-    }
-  }
-
-  const fellBack = waReason !== null;
   try {
     const res = await sendWithRetry(() => provider.sendSms({ to, body, idempotencyKey }));
-    return {
-      ok: true,
-      channel: "sms",
-      providerSid: res.providerSid,
-      fellBack,
-      error: fellBack ? `WhatsApp failed, sent via SMS. WhatsApp error: ${waReason}` : undefined,
-    };
+    return { ok: true, channel: "sms", providerSid: res.providerSid };
   } catch (smsErr) {
-    const smsReason = errMessage(smsErr);
     return {
       ok: false,
       channel: "sms",
       providerSid: null,
-      fellBack,
-      error: fellBack ? `WhatsApp failed: ${waReason} | SMS failed: ${smsReason}` : `SMS failed: ${smsReason}`,
+      error: `SMS failed: ${errMessage(smsErr)}`,
       errorCode: errCode(smsErr),
     };
   }
 }
 
-// Core send + log routine for the single-student path. WhatsApp-first with
-// automatic SMS fallback; records one Notification row with the outcome.
+// Core send + log routine for the single-student path. Sends one SMS and
+// records one Notification row with the outcome.
 export async function sendNotification(args: SendArgs): Promise<SendOutcome> {
   const { studentId, examId, type, parentPhone, body } = args;
-  const to = resolveDestination(parentPhone);
+  const { to, skipReason } = resolveSendTarget(parentPhone);
 
-  // No usable number → record as skipped, do not call the provider.
+  // No usable / not-allowed number → record as skipped, do not call the provider.
   if (!to) {
     await prisma.notification.create({
       data: {
         studentId, examId, type,
-        channel: "whatsapp",
+        channel: "sms",
         status: "skipped",
-        errorMessage: "No valid phone number to send to.",
+        errorMessage: skipReason ?? "No valid phone number to send to.",
       },
     });
-    return { ok: false, channel: null, status: "skipped", fellBack: false, to: null, error: "No valid phone number." };
+    return { ok: false, channel: null, status: "skipped", to: null, error: skipReason ?? "No valid phone number." };
   }
 
   const d = await deliverMessage({ to, body, idempotencyKey: `result:${examId ?? "none"}:${studentId}` });
@@ -139,12 +153,12 @@ export async function sendNotification(args: SendArgs): Promise<SendOutcome> {
   await prisma.notification.create({
     data: {
       studentId, examId, type,
-      channel: d.channel ?? "sms",
+      channel: "sms",
       status: d.ok ? "sent" : "failed",
       providerSid: d.providerSid,
       toNumber: to,
       errorCode: d.errorCode,
-      errorMessage: d.ok ? (d.fellBack ? d.error ?? null : null) : (d.error ?? "Send failed."),
+      errorMessage: d.ok ? null : (d.error ?? "Send failed."),
       sentAt: d.ok ? new Date() : null,
     },
   });
@@ -153,7 +167,6 @@ export async function sendNotification(args: SendArgs): Promise<SendOutcome> {
     ok: d.ok,
     channel: d.channel,
     status: d.ok ? "sent" : "failed",
-    fellBack: d.fellBack,
     to,
     error: d.error,
   };

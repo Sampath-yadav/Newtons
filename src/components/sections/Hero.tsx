@@ -73,10 +73,10 @@ export function Hero({
         </p>
 
         <div className="mt-7 flex flex-wrap items-center justify-center gap-3">
-          <Button href="/why-manthan" size="lg">
+          <Button href="/our-school/why-choose-us" size="lg">
             Why choose us
           </Button>
-          <Button href="/book-a-tour" variant="outline-light" size="lg">
+          <Button href="/contact#enquiry" variant="outline-light" size="lg">
             Book a tour
           </Button>
         </div>

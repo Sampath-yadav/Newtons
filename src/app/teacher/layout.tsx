@@ -7,7 +7,7 @@ export default function TeacherLayout({
 }) {
   return (
     <Providers>
-      <div className="min-h-screen bg-[#0d1117] text-white">{children}</div>
+      <div className="bg-[#f8fafc] text-slate-800">{children}</div>
     </Providers>
   );
 }

@@ -12,23 +12,40 @@ export const authOptions: NextAuthOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        if (!credentials?.email || !credentials?.password) return null;
+        // Logs land in the Vercel function logs, so a failing prod login can be
+        // diagnosed (wrong creds vs. DB error vs. session layer) without PII
+        // beyond the email that was attempted.
+        try {
+          if (!credentials?.email || !credentials?.password) {
+            console.warn("[auth] missing email or password");
+            return null;
+          }
 
-        const user = await prisma.user.findUnique({
-          where: { email: credentials.email },
-        });
+          const user = await prisma.user.findUnique({
+            where: { email: credentials.email },
+          });
 
-        if (!user) return null;
+          if (!user) {
+            console.warn(`[auth] no user found for ${credentials.email}`);
+            return null;
+          }
 
-        const valid = await bcrypt.compare(credentials.password, user.password);
-        if (!valid) return null;
+          const valid = await bcrypt.compare(credentials.password, user.password);
+          if (!valid) {
+            console.warn(`[auth] invalid password for ${credentials.email}`);
+            return null;
+          }
 
-        return {
-          id: String(user.id),
-          name: user.name,
-          email: user.email,
-          role: user.role as "teacher" | "admin",
-        };
+          return {
+            id: String(user.id),
+            name: user.name,
+            email: user.email,
+            role: user.role as "teacher" | "admin",
+          };
+        } catch (e) {
+          console.error("[auth] authorize() threw:", e);
+          return null;
+        }
       },
     }),
   ],
@@ -55,4 +72,7 @@ export const authOptions: NextAuthOptions = {
   },
   pages: { signIn: "/teacher" },
   secret: process.env.NEXTAUTH_SECRET,
+  // Force secure, prefixed cookies in production regardless of the NEXTAUTH_URL
+  // protocol, so the session cookie behaves correctly behind Vercel's HTTPS.
+  useSecureCookies: process.env.NODE_ENV === "production",
 };

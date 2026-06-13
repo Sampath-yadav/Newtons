@@ -1,12 +1,13 @@
 // src/data/welcomeFeatures.tsx
-import type { ComponentType, ReactNode, SVGProps } from "react";
+import type { ReactNode } from "react";
+import type { LucideIcon } from "lucide-react";
 import {
-  GlobeBookIcon,
-  GraduationCapIcon,
-  MentorIcon,
-  PeopleIcon,
-  TrophyIcon,
-} from "~/components/icons";
+  LibraryBig,
+  Award,
+  Sparkles,
+  UserRoundCheck,
+  Medal,
+} from "lucide-react";
 
 export interface FeatureTheme {
   /** Pastel header background color */
@@ -21,7 +22,7 @@ export interface FeatureTheme {
 
 export interface WelcomeFeature {
   id: string;
-  icon: ComponentType<SVGProps<SVGSVGElement>>;
+  icon: LucideIcon;
   title: string;
   body: ReactNode;
   /** Visual theme for the card header and accents */
@@ -40,7 +41,7 @@ export interface WelcomeFeature {
 export const WELCOME_FEATURES: WelcomeFeature[] = [
   {
     id: "ssc-curriculum",
-    icon: PeopleIcon,
+    icon: LibraryBig,
     title: "Quality SSC Education",
     body: (
       <>
@@ -60,7 +61,7 @@ export const WELCOME_FEATURES: WelcomeFeature[] = [
   },
   {
     id: "academic-excellence",
-    icon: GraduationCapIcon,
+    icon: Award,
     title: "Academic Excellence",
     body: (
       <>
@@ -80,7 +81,7 @@ export const WELCOME_FEATURES: WelcomeFeature[] = [
   },
   {
     id: "holistic-development",
-    icon: GlobeBookIcon,
+    icon: Sparkles,
     title: "Holistic Student Development",
     body: (
       <>
@@ -100,7 +101,7 @@ export const WELCOME_FEATURES: WelcomeFeature[] = [
   },
   {
     id: "faculty-mentorship",
-    icon: MentorIcon,
+    icon: UserRoundCheck,
     title: "Experienced Faculty & Mentorship",
     body: (
       <>
@@ -120,7 +121,7 @@ export const WELCOME_FEATURES: WelcomeFeature[] = [
   },
   {
     id: "sports-cocurricular",
-    icon: TrophyIcon,
+    icon: Medal,
     title: "Sports & Co-Curricular Activities",
     body: (
       <>

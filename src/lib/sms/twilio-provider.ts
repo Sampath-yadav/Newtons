@@ -1,4 +1,4 @@
-import { sendSMS, sendWhatsApp } from "../twilio";
+import { sendSMS } from "../twilio";
 import type { SmsProvider, SmsMessage, SmsSendResult } from "./provider";
 import { SmsError } from "./provider";
 
@@ -20,14 +20,6 @@ export const twilioProvider: SmsProvider = {
   async sendSms({ to, body }: SmsMessage): Promise<SmsSendResult> {
     try {
       const r = await sendSMS({ to, body });
-      return { providerSid: r.sid, status: r.status };
-    } catch (e) {
-      throw classify(e);
-    }
-  },
-  async sendWhatsApp({ to, body }: SmsMessage): Promise<SmsSendResult> {
-    try {
-      const r = await sendWhatsApp({ to, body });
       return { providerSid: r.sid, status: r.status };
     } catch (e) {
       throw classify(e);

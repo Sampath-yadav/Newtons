@@ -4,6 +4,7 @@ import { useState } from "react";
 import { signIn, getSession, signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { Container } from "~/components/layout/Container";
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -17,37 +18,52 @@ export default function AdminLoginPage() {
     setLoading(true);
     setError("");
 
-    const result = await signIn("credentials", {
-      email,
-      password,
-      redirect: false,
-    });
+    try {
+      const result = await signIn("credentials", {
+        email,
+        password,
+        redirect: false,
+      });
 
-    if (result?.error) {
-      setError("Invalid email or password. Please try again.");
+      if (!result || !result.ok || result.error) {
+        setError("Invalid email or password. Please try again.");
+        return;
+      }
+
+      // Confirm the session persisted (catches a misconfigured NEXTAUTH_URL /
+      // NEXTAUTH_SECRET in the deployment, which silently drops the cookie).
+      const session = await getSession();
+      if (!session) {
+        console.error("[admin-login] sign-in succeeded but no session was created — check NEXTAUTH_URL/NEXTAUTH_SECRET in the deployment environment.");
+        setError("Signed in, but the session could not be created. Please contact the administrator.");
+        return;
+      }
+
+      // This entry point is admins-only. A valid teacher account is signed back
+      // out so it cannot reach the admin dashboard through this door.
+      const role = (session.user as { role?: string } | undefined)?.role;
+      if (role !== "admin") {
+        await signOut({ redirect: false });
+        setError("This login is for administrators only. Please use the Teacher Portal.");
+        return;
+      }
+
+      router.push("/admin/marks");
+    } catch (err) {
+      console.error("[admin-login] authentication flow failed:", err);
+      setError("Couldn't sign you in right now. Please try again in a moment.");
+    } finally {
+      // Always clear loading so the button never sticks on "Signing in…".
       setLoading(false);
-      return;
     }
-
-    // This entry point is admins-only. A valid teacher account is signed back
-    // out so it cannot reach the admin dashboard through this door.
-    const session = await getSession();
-    const role = (session?.user as { role?: string } | undefined)?.role;
-    if (role !== "admin") {
-      await signOut({ redirect: false });
-      setError("This login is for administrators only. Please use the Teacher Portal.");
-      setLoading(false);
-      return;
-    }
-
-    router.push("/admin/marks");
   }
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center px-4">
-      <div className="w-full max-w-sm">
+    <section className="bg-[#f8fafc] py-12 lg:py-20">
+      <Container>
+        <div className="mx-auto max-w-md">
         {/* Logo */}
-        <div className="mb-10 text-center">
+        <div className="mb-8 text-center">
           <Image
             src="/images/school_logo/Newtons_logo.png"
             alt="Newton's High School"
@@ -117,7 +133,8 @@ export default function AdminLoginPage() {
             Go to Teacher Portal
           </a>
         </p>
-      </div>
-    </div>
+        </div>
+      </Container>
+    </section>
   );
 }

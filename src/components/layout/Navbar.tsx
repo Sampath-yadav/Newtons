@@ -532,39 +532,46 @@ export function Navbar() {
                     if (!sub) return null;
                     return (
                       <div className="flex min-h-full flex-col">
-                        {/* Back + section title */}
-                        <div className="px-5 pt-3">
+                        {/* Back button — generous touch target with tap feedback */}
+                        <div className="px-4 pt-2">
                           <button
                             type="button"
                             onClick={closeSub}
-                            className="-ml-1 mb-2 inline-flex items-center gap-1.5 rounded-lg py-1 pr-2 text-[13px] font-semibold text-brand-orange active:opacity-70"
+                            className="-ml-1 inline-flex items-center gap-1 rounded-lg px-2 py-2 text-[12px] font-bold uppercase tracking-wide text-brand-orange transition-colors active:bg-brand-orange/10"
                           >
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
                               <polyline points="15 18 9 12 15 6" />
                             </svg>
                             Back
                           </button>
-                          <Link
-                            href={sub.href}
-                            onClick={closeNav}
-                            className="inline-block text-[20px] font-extrabold text-brand-navy underline decoration-brand-orange/40 underline-offset-4 hover:decoration-brand-orange"
-                          >
-                            {sub.label}
-                          </Link>
-                          <p className="mt-0.5 text-[13px] text-brand-muted">{sub.subtitle}</p>
                         </div>
 
-                        {/* Sub-item links */}
-                        <ul className="mt-3 px-5">
+                        {/* Section header — clear title + subtitle */}
+                        <div className="px-5 pb-4 pt-1">
+                          <Link href={sub.href} onClick={closeNav} className="block active:opacity-70">
+                            <h3 className="text-[22px] font-extrabold leading-tight text-brand-navy">{sub.label}</h3>
+                          </Link>
+                          <p className="mt-1 text-[13px] font-medium text-brand-muted">{sub.subtitle}</p>
+                        </div>
+
+                        <div className="mx-5 border-t border-slate-100" />
+
+                        {/* Sub-item links — bigger targets + trailing chevron affordance */}
+                        <ul className="px-5">
                           {sub.items.map((s) => (
                             <li key={s.href} className="border-b border-slate-100 last:border-0">
                               <Link
                                 href={s.href}
                                 onClick={closeNav}
-                                className="group flex items-center gap-3 py-3.5 active:opacity-70"
+                                className="group flex items-center justify-between gap-3 py-4 active:opacity-70"
                               >
-                                <span className="block h-[2px] w-4 shrink-0 rounded-full bg-slate-300 transition-all duration-200 group-hover:w-6 group-hover:bg-brand-orange" />
-                                <span className="text-[15px] font-medium text-brand-navy">{s.label}</span>
+                                <span className="flex min-w-0 items-center gap-3">
+                                  <span className="block h-[2px] w-4 shrink-0 rounded-full bg-slate-300 transition-all duration-200 group-hover:w-6 group-hover:bg-brand-orange" />
+                                  <span className="truncate text-[15px] font-semibold text-brand-navy">{s.label}</span>
+                                </span>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" className="shrink-0 text-slate-300 transition-colors group-hover:text-brand-orange" aria-hidden>
+                                  <polyline points="9 6 15 12 9 18" />
+                                </svg>
                               </Link>
                             </li>
                           ))}

@@ -14,7 +14,7 @@ export function StageNav() {
   const pathname = usePathname();
 
   return (
-    <div className="sticky top-[100px] z-40 bg-white shadow-sm">
+    <div className="sticky top-20 z-40 bg-white shadow-sm">
       <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
         <div
           className="flex overflow-x-auto border-b border-slate-200"

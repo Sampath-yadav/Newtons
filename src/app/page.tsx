@@ -30,7 +30,7 @@ export default function HomePage() {
       {/* 5 ── Admissions Journey: pill toggle (Indian/International) + step cards */}
       <AdmissionsJourney />
 
-      {/* 6 ── What Makes Manthan Great: principal testimonial + avatar row */}
+      {/* 6 ── What Makes Newton's Great: principal testimonial + avatar row */}
       <WhatMakesGreat />
 
       {/* 7 ── Confidence Grows CTA: navy split-banner + lab photo */}

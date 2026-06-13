@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getToken } from "next-auth/jwt";
 import { prisma } from "~/lib/prisma";
-import { buildResultMessage, deliverMessage, resolveDestination } from "~/lib/notifications";
+import { buildResultMessage, deliverMessage, resolveSendTarget } from "~/lib/notifications";
 import { checkResultMapping } from "~/lib/result-mapping";
 
 // Sends the result link to parents in ONE bounded batch and reports how many
@@ -94,7 +94,7 @@ export async function POST(
     const claims: Array<{ claimId: number; token: string; student: TokenRow["student"] }> = [];
     for (const t of take) {
       const row = await tx.notification.create({
-        data: { studentId: t.studentId, examId: id, type: "result", channel: "whatsapp", status: "pending" },
+        data: { studentId: t.studentId, examId: id, type: "result", channel: "sms", status: "pending" },
       });
       claims.push({ claimId: row.id, token: t.token, student: t.student });
     }
@@ -102,22 +102,23 @@ export async function POST(
   });
 
   // ── Phase 2: deliver each claimed recipient (outside the lock/transaction) ──
-  const results: Array<{ studentId: number; ok: boolean; channel: string | null; status: string; fellBack: boolean; error?: string }> = [];
+  const results: Array<{ studentId: number; ok: boolean; channel: string | null; status: string; error?: string }> = [];
   let sent = 0, failed = 0, skipped = 0;
 
   for (const c of claim.claims) {
     const studentId = c.student.id;
 
     // Validate the student ↔ token ↔ exam mapping before sending (anti cross-map),
-    // then resolve the destination (honours test mode).
+    // then resolve + gate the destination (test mode + Twilio trial allowlist).
     const mapping = checkResultMapping({ resultToken: { studentId, examId: id }, studentId, examId: id });
-    const to = mapping.ok ? resolveDestination(c.student.parentPhone) : null;
+    const target = mapping.ok ? resolveSendTarget(c.student.parentPhone) : { to: null, skipReason: mapping.reason };
+    const to = target.to;
 
-    if (!mapping.ok || !to) {
-      const reason = !mapping.ok ? mapping.reason : "No valid parent phone on file.";
+    if (!to) {
+      const reason = target.skipReason ?? "No valid parent phone on file.";
       await prisma.notification.update({ where: { id: c.claimId }, data: { status: "skipped", errorMessage: reason } });
       skipped++;
-      results.push({ studentId, ok: false, channel: null, status: "skipped", fellBack: false, error: reason });
+      results.push({ studentId, ok: false, channel: null, status: "skipped", error: reason });
       continue;
     }
 
@@ -133,18 +134,18 @@ export async function POST(
     await prisma.notification.update({
       where: { id: c.claimId },
       data: {
-        channel: d.channel ?? "sms",
+        channel: "sms",
         status: d.ok ? "sent" : "failed",
         providerSid: d.providerSid,
         toNumber: to,
         errorCode: d.errorCode,
-        errorMessage: d.ok ? (d.fellBack ? d.error ?? null : null) : (d.error ?? "Send failed."),
+        errorMessage: d.ok ? null : (d.error ?? "Send failed."),
         sentAt: d.ok ? new Date() : null,
       },
     });
 
     if (d.ok) sent++; else failed++;
-    results.push({ studentId, ok: d.ok, channel: d.channel, status: d.ok ? "sent" : "failed", fellBack: d.fellBack, error: d.error });
+    results.push({ studentId, ok: d.ok, channel: d.channel, status: d.ok ? "sent" : "failed", error: d.error });
   }
 
   console.log(`[send] exam ${id} batch: processed=${claim.claims.length} sent=${sent} failed=${failed} skipped=${skipped} remaining=${claim.remaining}`);

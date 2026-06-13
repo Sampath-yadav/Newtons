@@ -10,9 +10,8 @@ interface DispatchBody {
 }
 
 // Sends a published result link to one student's parent, server-side, via the
-// notification service (WhatsApp first, automatic SMS fallback). The server
-// builds the message and looks up the secure token — it never trusts the client
-// for the link or destination.
+// notification service (SMS). The server builds the message and looks up the
+// secure token — it never trusts the client for the link or destination.
 export async function POST(request: NextRequest) {
   const token = await getToken({ req: request, secret: process.env.NEXTAUTH_SECRET });
   if (!token || token.role !== "admin") {

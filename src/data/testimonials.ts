@@ -24,7 +24,7 @@ export const TESTIMONIALS: Testimonial[] = [
     id: "principal",
     imageSrc: "/images/people/Principal.png",
     quote:
-      "At Manthan School, we believe in celebrating the unique individuality of each child and fostering the growth of their innate talents.",
+      "At Newton's High School, we believe in celebrating the unique individuality of each child and fostering the growth of their innate talents.",
     authorName: "Surjeet Singh",
     authorRole: "Principal",
     chipRole: "Principal",
@@ -35,7 +35,7 @@ export const TESTIMONIALS: Testimonial[] = [
     id: "student",
     imageSrc: "/images/people/Student-1.png",
     quote:
-      "Manthan gave me the confidence to speak on stage, lead a team, and think for myself. I feel genuinely prepared for whatever comes next.",
+      "Newton's High School gave me the confidence to speak on stage, lead a team, and think for myself. I feel genuinely prepared for whatever comes next.",
     authorName: "Aarav Mehta",
     authorRole: "Grade 11 Student",
     chipRole: "Student",
@@ -57,7 +57,7 @@ export const TESTIMONIALS: Testimonial[] = [
     id: "teacher",
     imageSrc: "/images/people/teacher-1.png",
     quote:
-      "Teaching at Manthan means having the freedom and support to innovate. Every day, I see students grow beyond what they thought possible.",
+      "Teaching at Newton's High School means having the freedom and support to innovate. Every day, I see students grow beyond what they thought possible.",
     authorName: "Priya Krishnan",
     authorRole: "Cambridge Science Faculty",
     chipRole: "Teacher",
@@ -68,7 +68,7 @@ export const TESTIMONIALS: Testimonial[] = [
     id: "parent-2",
     imageSrc: "/images/people/parent-2.jpg",
     quote:
-      "Shifting from overseas, we were anxious about the transition. Manthan's team made our daughter feel at home from day one.",
+      "Shifting from overseas, we were anxious about the transition. The Newton's High School team made our daughter feel at home from day one.",
     authorName: "Sunita Verma",
     authorRole: "Parent — Grade 3, International Admission",
     chipRole: "Parent",
@@ -79,7 +79,7 @@ export const TESTIMONIALS: Testimonial[] = [
     id: "teacher-2",
     imageSrc: "/images/people/teacher-2.jpg",
     quote:
-      "What sets Manthan apart is how deeply the school cares about holistic development — not just marks, but character, creativity, and confidence.",
+      "What sets Newton's High School apart is how deeply the school cares about holistic development — not just marks, but character, creativity, and confidence.",
     authorName: "Ananya Reddy",
     authorRole: "Head of Arts & Humanities",
     chipRole: "Teacher",

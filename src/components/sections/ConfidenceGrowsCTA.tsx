@@ -23,26 +23,26 @@ export default function ConfidenceGrowsCTA() {
       aria-labelledby="cta-heading"
       className="relative w-full overflow-hidden bg-brand-navy"
     >
-      <div className="grid min-h-[70vh] grid-cols-1 md:grid-cols-2">
+      <div className="grid grid-cols-1 md:min-h-[70vh] md:grid-cols-2">
 
         {/* ── LEFT: Text content ── */}
-        <div className="flex flex-col justify-center gap-6 px-8 py-14 sm:px-12 lg:px-16 xl:px-20">
+        <div className="flex flex-col justify-center gap-5 px-6 pb-8 pt-12 sm:px-12 md:gap-6 md:py-14 lg:px-16 xl:px-20">
 
           {/* Label pill */}
-          <span className="inline-block w-fit rounded-full border border-brand-orange/40 bg-white/10 px-4 py-1 text-xs font-semibold uppercase tracking-widest text-brand-orange">
+          <span className="inline-block w-fit rounded-full border border-brand-orange/40 bg-white/10 px-3.5 py-1 text-[11px] font-semibold uppercase tracking-widest text-brand-orange sm:px-4 sm:text-xs">
             Newton&apos;s High School
           </span>
 
           {/* Heading */}
           <h2
             id="cta-heading"
-            className="text-3xl font-bold leading-tight text-white sm:text-4xl lg:text-[2.6rem]"
+            className="text-[28px] font-bold leading-[1.15] text-white sm:text-4xl lg:text-[2.6rem]"
           >
             Where confidence grows
           </h2>
 
           {/* Body */}
-          <p className="max-w-md leading-relaxed text-white/75 sm:text-base">
+          <p className="max-w-md text-[15px] leading-relaxed text-white/75 sm:text-base">
             Discover how Newton&apos;s High School empowers students to lead
             their learning through Cambridge and SSC programmes, build skills
             and access top universities around the world.
@@ -51,7 +51,7 @@ export default function ConfidenceGrowsCTA() {
           {/* CTA */}
           <div className="mt-1">
             <Link
-              href="/admissions/enquire"
+              href="/admissions/enquire-now"
               className="inline-flex items-center gap-2 rounded-full bg-brand-orange px-7 py-3 text-sm font-semibold text-white shadow-cta transition-all duration-200 hover:brightness-110 hover:scale-[1.03] active:scale-95"
             >
               Enquire now
@@ -78,15 +78,15 @@ export default function ConfidenceGrowsCTA() {
             • Center at (93%, 50%) keeps most of the photo visible
         */}
         <div
-          className="relative min-h-[380px] md:min-h-0"
-          style={{ clipPath: "ellipse(65% 100% at 93% 50%)" }}
+          className="relative h-[230px] w-full sm:h-[300px] md:h-auto md:min-h-0
+                     md:[clip-path:ellipse(65%_100%_at_93%_50%)]"
         >
           <Image
             src="/images/cta-banner/students.jpg"
             alt="Newton's High School students in the school ground"
             fill
             sizes="(max-width: 768px) 100vw, 50vw"
-            className="object-contain object-center"
+            className="object-cover object-center"
           />
           {/* Dark placeholder shown until image is added */}
           <div className="absolute inset-0 -z-10 bg-brand-navy-deep" />

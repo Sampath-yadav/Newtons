@@ -441,7 +441,7 @@ export default function ReviewPage() {
             <h3 className="mb-1 text-[17px] font-extrabold text-[#1F2A66]">Approve & Publish Results?</h3>
             <p className="mb-5 text-[13px] text-slate-500">
               This will publish {exam.name} results for Class {exam.class}{exam.section} ({stats.studentCount} students).
-              Parents will receive WhatsApp notifications with their result links.
+              Parents will receive SMS notifications with their result links.
             </p>
             <div className="mb-5 rounded-xl bg-slate-50 px-4 py-3 text-[13px] space-y-1">
               <div className="flex justify-between"><span className="text-slate-500">Exam</span><span className="font-semibold text-slate-700">{exam.name}</span></div>

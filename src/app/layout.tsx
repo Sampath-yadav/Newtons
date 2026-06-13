@@ -24,7 +24,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={inter.variable}>
-      <body className="min-h-dvh bg-white antialiased pb-[64px] lg:pb-0">
+      {/* suppressHydrationWarning: browser extensions (e.g. ColorZilla adds
+          cz-shortcut-listen) mutate <body> before React hydrates, which is
+          otherwise flagged as a hydration mismatch. Scoped to <body> only. */}
+      <body className="min-h-dvh bg-white antialiased pb-[64px] lg:pb-0" suppressHydrationWarning>
         <Navbar />
         <main>{children}</main>
         <Footer />

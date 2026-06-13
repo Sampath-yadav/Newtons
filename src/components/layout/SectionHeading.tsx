@@ -7,7 +7,7 @@ interface SectionHeadingProps {
   title: string;
   /** Optional intro paragraph shown under the title. */
   intro?: ReactNode;
-  /** Layout: "left" (Welcome to Manthan School), "center" (Learning journey, etc.) */
+  /** Layout: "left" (Welcome to Newton's High School), "center" (Learning journey, etc.) */
   align?: "left" | "center";
   className?: string;
 }
@@ -15,8 +15,8 @@ interface SectionHeadingProps {
 /**
  * SectionHeading
  * ---------------
- * Reusable title block. "Welcome to Manthan School" uses align="left" with no
- * intro; "Learning journey", "Admissions journey", "What makes Manthan great?"
+ * Reusable title block. "Welcome to Newton's High School" uses align="left" with
+ * no intro; "Learning journey", "Admissions journey", "What makes Newton's great?"
  * use align="center" with a paragraph below.
  */
 export function SectionHeading({
