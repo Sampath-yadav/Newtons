@@ -10,7 +10,10 @@ const IMG = "/images/sections/contact";
 const ADDRESS = `${SITE.address.line1} ${SITE.address.line2} ${SITE.address.line3}`;
 const PHONE = SITE.phones[0];
 const EMAIL = "info@newtonshighschool.edu";
-const MAP_SRC = "https://maps.google.com/maps?q=Tellapur%20Village%20Sangareddy%20Telangana&z=13&output=embed";
+// Embedded preview centred on the school in satellite view (matches the live link's 3D/satellite view).
+const MAP_SRC = "https://maps.google.com/maps?q=18.3925982,77.8755254(Newton's+High+School)&t=k&z=16&output=embed";
+// Full Google Maps destination — opened when the map is clicked.
+const MAP_LINK = "https://www.google.com/maps/place/Newtons+High+School/@18.3926055,77.8729831,777m/data=!3m1!1e3!4m7!3m6!1s0x3bce80f347d483d5:0x3a8ca9669cac505a!4b1!8m2!3d18.3925982!4d77.8755254!16s%2Fg%2F11dxlb4qwp?entry=ttu";
 
 /* ── Icons ────────────────────────────────────────────────────────────────── */
 const ICON = {
@@ -97,15 +100,31 @@ export function ContactExperience() {
       <section id="map" className="scroll-mt-24 bg-white pb-16 lg:pb-24">
         <Container>
           <div className="grid grid-cols-1 overflow-hidden rounded-3xl border border-slate-100 shadow-card-lg lg:grid-cols-2">
-            {/* Map */}
+            {/* Map — fully interactive (scroll, zoom & pan inside the page) */}
             <div className="relative min-h-[360px] lg:min-h-full">
               <iframe
                 title="Newton's High School location"
                 src={MAP_SRC}
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
-                className="absolute inset-0 h-full w-full grayscale-[0.15]"
+                className="absolute inset-0 h-full w-full"
               />
+              {/* Floating shortcut → opens the full Google Maps view in a new tab.
+                  Sits above the map but only over its own area, so the rest of the
+                  map stays draggable/zoomable. */}
+              <a
+                href={MAP_LINK}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Open Newton's High School on Google Maps"
+                className="group absolute bottom-4 right-4 z-10 inline-flex items-center gap-2 rounded-full bg-white/95 px-4 py-2 text-[13px] font-bold text-brand-navy shadow-lg ring-1 ring-black/5 transition hover:bg-brand-orange hover:text-white"
+              >
+                <Ico name="pin" className="h-4 w-4" />
+                View on Google Maps
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" className="h-3.5 w-3.5" aria-hidden>
+                  <path d="M7 17 17 7M9 7h8v8" />
+                </svg>
+              </a>
             </div>
             {/* Form */}
             <div className="bg-[#FFFBF5] p-7 sm:p-10">

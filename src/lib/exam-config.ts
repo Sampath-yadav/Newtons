@@ -49,6 +49,28 @@ export function getExamConfig(examName: string): ExamConfig {
   return cfg;
 }
 
+// Validate a single mark cell for a subject. Used by both the upload preview
+// and the submit gate so the rules are identical in both places.
+//   - blank / whitespace-only  → error (NEVER silently treated as 0 or absent)
+//   - "AB" (any case)          → valid (absent)
+//   - a number in 0..max       → valid
+export type MarkValidation =
+  | { ok: true; value: string }
+  | { ok: false; reason: "blank" | "invalid" | "exceeds" };
+
+export function validateMarkCell(
+  rawValue: string | null | undefined,
+  sub: SubjectConfig
+): MarkValidation {
+  const trimmed = (rawValue ?? "").trim();
+  if (trimmed === "") return { ok: false, reason: "blank" };
+  if (trimmed.toUpperCase() === "AB") return { ok: true, value: "AB" };
+  const num = Number(trimmed);
+  if (!Number.isFinite(num) || num < 0) return { ok: false, reason: "invalid" };
+  if (num > sub.max) return { ok: false, reason: "exceeds" };
+  return { ok: true, value: String(num) };
+}
+
 // Grade scale: Newton's SSC grading
 export function getGrade(percentage: number): string {
   if (percentage >= 91) return "A1";

@@ -10,12 +10,14 @@ import { PrismaPg } from "@prisma/adapter-pg";
 import bcrypt from "bcryptjs";
 import { config } from "dotenv";
 import path from "node:path";
+import { studentPhoneGuard } from "../src/lib/student-phone-guard";
 
 config({ path: path.resolve(process.cwd(), ".env.local") });
 
 const pool = new Pool({ connectionString: process.env.DATABASE_URL });
 const adapter = new PrismaPg(pool);
-const prisma = new PrismaClient({ adapter });
+// Same parent-phone guard as the app: seeded numbers are stored as +91 E.164.
+const prisma = new PrismaClient({ adapter }).$extends(studentPhoneGuard);
 
 async function main() {
   const adminPassword = await bcrypt.hash("admin123", 10);

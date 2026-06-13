@@ -204,7 +204,7 @@ export function Navbar() {
         className="sticky top-0 z-50 border-b border-slate-200/70 bg-white"
       >
         {/* ── Mobile top bar: logo left · name centre · person icon right ── */}
-        <Container className="relative flex h-16 items-center justify-between px-4 lg:hidden">
+        <Container className="relative flex h-20 items-center justify-between px-4 lg:hidden">
           <Link href="/" aria-label="Newton's High School home" className="flex items-center">
             <BrandNewtons />
           </Link>
@@ -224,7 +224,7 @@ export function Navbar() {
             onClick={() => (portalOpen ? closePortal() : openPortal())}
             className="grid h-12 w-12 shrink-0 place-items-center rounded-full text-brand-navy transition-colors hover:bg-slate-100 active:bg-slate-200"
           >
-            <UserIcon width={26} height={26} />
+            <UserIcon width={30} height={30} />
           </button>
         </Container>
 
@@ -232,7 +232,7 @@ export function Navbar() {
         <Container className="hidden h-[80px] items-center px-6 lg:flex">
           {/* Left: logos */}
           <div className="flex shrink-0 items-center">
-            <Link href="/" className="flex items-center gap-1" aria-label="Newton's High School home">
+            <Link href="/" className="flex items-center gap-3" aria-label="Newton's High School home">
               <BrandNewtons />
               <BrandNameLogo />
             </Link>
@@ -274,7 +274,7 @@ export function Navbar() {
 
           {/* Right: CTA + icons */}
           <div className="flex shrink-0 items-center gap-3">
-            <Button href="/admissions" size="sm">
+            <Button href="/contact" size="sm">
               Enquire now
             </Button>
             <button
@@ -667,7 +667,7 @@ export function Navbar() {
           </Link>
 
           <Link
-            href="/admissions"
+            href="/contact"
             className="flex h-11 max-w-[220px] flex-1 items-center justify-center rounded-full bg-brand-orange px-6 text-[14px] font-bold text-white shadow-cta transition-colors hover:bg-[#e08500]"
           >
             Enquire now
@@ -691,13 +691,15 @@ export function Navbar() {
 /* ── Brand marks ─────────────────────────────────────────────────────────── */
 
 function BrandNewtons() {
+  // Trimmed artwork is ~1.23:1 (wider than tall); container matches that ratio
+  // so the badge fills the full bar height instead of floating in a square box.
   return (
-    <div className="relative h-12 w-12 shrink-0 sm:h-[52px] sm:w-[52px] lg:h-[64px] lg:w-[64px]">
+    <div className="relative h-[40px] w-[50px] shrink-0 sm:h-[50px] sm:w-[62px] lg:h-[42px] lg:w-[52px]">
       <Image
         src="/images/school_logo/Newtons_logo.png"
         alt="Newton's High School badge"
         fill
-        className="object-contain object-left lg:object-right"
+        className="object-contain"
         priority
       />
     </div>
@@ -705,13 +707,16 @@ function BrandNewtons() {
 }
 
 function BrandNameLogo({ className = "" }: { className?: string }) {
+  // Trimmed wordmark is ~15:1 (wide & short) — size by WIDTH so it fills the
+  // available space crisply; height follows the true aspect ratio automatically.
   return (
     <Image
       src="/images/school_logo/Name_logo.png"
       alt="Newton's High School"
-      height={96}
-      width={300}
-      className={`h-[44px] w-auto self-center object-contain object-center sm:h-[52px] lg:h-[62px] lg:object-left ${className}`}
+      width={1426}
+      height={94}
+      className={`w-[195px] h-auto self-center object-contain sm:w-[200px] lg:w-[200px] ${className}`}
+      priority
     />
   );
 }

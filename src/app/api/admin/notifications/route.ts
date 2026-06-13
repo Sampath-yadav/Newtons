@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getToken } from "next-auth/jwt";
 import { prisma } from "~/lib/prisma";
 import { sendResultNotification, buildResultMessage } from "~/lib/notifications";
+import { checkResultMapping } from "~/lib/result-mapping";
 
 interface DispatchBody {
   examId: number;
@@ -37,6 +38,13 @@ export async function POST(request: NextRequest) {
   });
   if (!resultToken) {
     return NextResponse.json({ error: "No result token for this student/exam." }, { status: 404 });
+  }
+
+  // Guard the student ↔ token ↔ exam mapping before sending — Student A's link
+  // can never go to Student B's parent.
+  const mapping = checkResultMapping({ resultToken, studentId, examId });
+  if (!mapping.ok) {
+    return NextResponse.json({ error: mapping.reason }, { status: 409 });
   }
 
   const base = process.env.NEXT_PUBLIC_BASE_URL ?? request.nextUrl.origin;

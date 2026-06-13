@@ -43,23 +43,38 @@ export function FeatureCard({
 }: FeatureCardProps) {
   return (
     <div className="group flex h-full flex-col overflow-hidden rounded-[16px] bg-white shadow-[0_1px_3px_rgba(0,0,0,0.04),0_12px_32px_-12px_rgba(0,0,0,0.10)] transition-shadow duration-300 hover:shadow-[0_2px_4px_rgba(0,0,0,0.06),0_20px_48px_-16px_rgba(0,0,0,0.16)]">
-      {/* ── Header zone ────────────────────────────────────────────────── */}
-      <div
-        className="relative flex h-[168px] shrink-0 items-start overflow-hidden px-5 pt-5 sm:h-[188px] sm:px-6 sm:pt-6"
-        style={{ backgroundColor: theme.headerBg }}
-      >
-        {/* Whole image shown (zoomed out / contained) so banners & infographics stay fully visible */}
+      {/* ── Header / image banner ──────────────────────────────────────────
+          Fixed-height banner so every card is uniform. The whole image is
+          shown via object-contain (never cropped); a blurred, zoomed copy of
+          the same image fills the empty space edge-to-edge for a premium look
+          that works for any aspect ratio. */}
+      <div className="relative h-[185px] shrink-0 overflow-hidden sm:h-[200px]">
+        {/* Blurred backdrop — same image, scaled & blurred to fill the frame */}
+        <Image
+          src={imageSrc}
+          alt=""
+          aria-hidden
+          fill
+          className="scale-125 object-cover blur-2xl"
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 20vw"
+        />
+        {/* Soft light scrim so the sharp image and icon stay crisp */}
+        <div className="absolute inset-0 bg-gradient-to-t from-white/55 via-white/15 to-white/25" />
+        {/* Sharp, fully-visible image */}
         <Image
           src={imageSrc}
           alt=""
           fill
-          className="object-contain object-center p-2"
+          className="object-contain object-center drop-shadow-[0_6px_16px_rgba(0,0,0,0.14)]"
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 20vw"
         />
+      </div>
 
-        {/* Floating icon circle */}
+      {/* ── Content zone ───────────────────────────────────────────────── */}
+      <div className="relative flex flex-1 flex-col px-5 pb-5 sm:px-6 sm:pb-6">
+        {/* Floating icon circle — straddles the image / content boundary */}
         <div
-          className="relative z-10 flex h-12 w-12 shrink-0 items-center justify-center rounded-full shadow-[0_2px_8px_rgba(0,0,0,0.08)] sm:h-14 sm:w-14"
+          className="relative z-10 -mt-7 mb-4 flex h-14 w-14 shrink-0 items-center justify-center rounded-full shadow-[0_4px_12px_rgba(0,0,0,0.12)] ring-4 ring-white"
           style={{ backgroundColor: theme.iconBg }}
         >
           <Icon
@@ -68,10 +83,7 @@ export function FeatureCard({
             style={{ color: theme.iconColor, stroke: theme.iconColor }}
           />
         </div>
-      </div>
 
-      {/* ── Content zone ───────────────────────────────────────────────── */}
-      <div className="flex flex-1 flex-col px-5 pb-5 pt-5 sm:px-6 sm:pb-6 sm:pt-6">
         {/* Title */}
         <h3 className="text-[17px] font-bold leading-snug text-brand-ink sm:text-lg">
           {title}

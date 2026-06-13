@@ -32,7 +32,11 @@ export const authOptions: NextAuthOptions = {
       },
     }),
   ],
-  session: { strategy: "jwt" },
+  // 8-hour sessions (one school day). A teacher who leaves the upload page open
+  // overnight will be warned before this elapses (see SessionExpiryWarning) so
+  // they don't lose work to a silent 401. Sessions are rolling, so active use
+  // keeps extending them.
+  session: { strategy: "jwt", maxAge: 8 * 60 * 60 },
   callbacks: {
     async jwt({ token, user }) {
       if (user) {

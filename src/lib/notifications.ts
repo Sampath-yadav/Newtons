@@ -1,5 +1,6 @@
 import { prisma } from "~/lib/prisma";
-import { sendWhatsApp, sendSMS } from "~/lib/twilio";
+import { getSmsProvider, sendWithRetry } from "~/lib/sms";
+import { safeNormalizePhone } from "~/lib/phone";
 
 // High-level notification service.
 //
@@ -35,20 +36,10 @@ export function whatsAppEnabled(): boolean {
 }
 
 // Normalise an Indian mobile number to E.164 (+91XXXXXXXXXX).
-// Returns null if the input cannot be turned into a plausible number.
+// Delegates to the shared phone utility so the SEND path and the SAVE/IMPORT
+// path apply identical rules. Returns null if the number isn't plausible.
 export function normalizeE164(raw: string | null | undefined): string | null {
-  if (!raw) return null;
-  const trimmed = raw.trim();
-  // Already E.164 (has +).
-  if (trimmed.startsWith("+")) {
-    const digits = trimmed.slice(1).replace(/\D/g, "");
-    return digits.length >= 11 && digits.length <= 15 ? `+${digits}` : null;
-  }
-  const digits = trimmed.replace(/\D/g, "");
-  if (digits.length === 10) return `+91${digits}`;            // bare 10-digit
-  if (digits.length === 11 && digits.startsWith("0")) return `+91${digits.slice(1)}`; // leading 0
-  if (digits.length === 12 && digits.startsWith("91")) return `+${digits}`;           // 91XXXXXXXXXX
-  return null;
+  return safeNormalizePhone(raw);
 }
 
 // Resolve the destination number, honouring test mode.
@@ -67,12 +58,70 @@ interface SendArgs {
   body: string;
 }
 
-// Core send + log routine. WhatsApp-first with synchronous SMS fallback.
+// Pure delivery result — what happened on the wire, with NO database writes.
+// The caller decides how to record it (single-send creates a row; the batch
+// updates its pre-created claim row). This keeps the WhatsApp→SMS fallback +
+// retry logic in one place and reusable.
+export interface DeliveryResult {
+  ok: boolean;
+  channel: "whatsapp" | "sms" | null;
+  providerSid: string | null;
+  fellBack: boolean;
+  error?: string;
+  errorCode?: string;
+}
+
+// Attempt delivery to an already-resolved E.164 number: WhatsApp first (if
+// enabled & supported), automatic SMS fallback, each wrapped in retry/backoff.
+// Does NOT touch the database.
+export async function deliverMessage(opts: {
+  to: string;
+  body: string;
+  idempotencyKey: string;
+}): Promise<DeliveryResult> {
+  const provider = getSmsProvider();
+  const { to, body, idempotencyKey } = opts;
+
+  let waReason: string | null = null;
+  if (whatsAppEnabled() && provider.sendWhatsApp) {
+    try {
+      const res = await sendWithRetry(() => provider.sendWhatsApp!({ to, body, idempotencyKey }));
+      return { ok: true, channel: "whatsapp", providerSid: res.providerSid, fellBack: false };
+    } catch (waErr) {
+      waReason = errMessage(waErr);
+    }
+  }
+
+  const fellBack = waReason !== null;
+  try {
+    const res = await sendWithRetry(() => provider.sendSms({ to, body, idempotencyKey }));
+    return {
+      ok: true,
+      channel: "sms",
+      providerSid: res.providerSid,
+      fellBack,
+      error: fellBack ? `WhatsApp failed, sent via SMS. WhatsApp error: ${waReason}` : undefined,
+    };
+  } catch (smsErr) {
+    const smsReason = errMessage(smsErr);
+    return {
+      ok: false,
+      channel: "sms",
+      providerSid: null,
+      fellBack,
+      error: fellBack ? `WhatsApp failed: ${waReason} | SMS failed: ${smsReason}` : `SMS failed: ${smsReason}`,
+      errorCode: errCode(smsErr),
+    };
+  }
+}
+
+// Core send + log routine for the single-student path. WhatsApp-first with
+// automatic SMS fallback; records one Notification row with the outcome.
 export async function sendNotification(args: SendArgs): Promise<SendOutcome> {
   const { studentId, examId, type, parentPhone, body } = args;
   const to = resolveDestination(parentPhone);
 
-  // No usable number → record as skipped, do not call Twilio.
+  // No usable number → record as skipped, do not call the provider.
   if (!to) {
     await prisma.notification.create({
       data: {
@@ -85,58 +134,29 @@ export async function sendNotification(args: SendArgs): Promise<SendOutcome> {
     return { ok: false, channel: null, status: "skipped", fellBack: false, to: null, error: "No valid phone number." };
   }
 
-  // 1) Try WhatsApp first — unless it's disabled (SMS-only mode).
-  let waReason: string | null = null;
-  if (whatsAppEnabled()) {
-    try {
-      const res = await sendWhatsApp({ to, body });
-      await prisma.notification.create({
-        data: {
-          studentId, examId, type,
-          channel: "whatsapp",
-          status: "sent",
-          providerSid: res.sid,
-          toNumber: to,
-          sentAt: new Date(),
-        },
-      });
-      return { ok: true, channel: "whatsapp", status: "sent", fellBack: false, to };
-    } catch (waErr) {
-      waReason = errMessage(waErr);
-      // fall through to SMS
-    }
-  }
+  const d = await deliverMessage({ to, body, idempotencyKey: `result:${examId ?? "none"}:${studentId}` });
 
-  // 2) SMS — either WhatsApp is disabled, or it failed and we're falling back.
-  const fellBack = waReason !== null;
-  try {
-    const res = await sendSMS({ to, body });
-    await prisma.notification.create({
-      data: {
-        studentId, examId, type,
-        channel: "sms",
-        status: "sent",
-        providerSid: res.sid,
-        toNumber: to,
-        errorMessage: fellBack ? `WhatsApp failed, sent via SMS. WhatsApp error: ${waReason}` : null,
-        sentAt: new Date(),
-      },
-    });
-    return { ok: true, channel: "sms", status: "sent", fellBack, to };
-  } catch (smsErr) {
-    const smsReason = errMessage(smsErr);
-    await prisma.notification.create({
-      data: {
-        studentId, examId, type,
-        channel: "sms",
-        status: "failed",
-        toNumber: to,
-        errorCode: errCode(smsErr),
-        errorMessage: fellBack ? `WhatsApp failed: ${waReason} | SMS failed: ${smsReason}` : `SMS failed: ${smsReason}`,
-      },
-    });
-    return { ok: false, channel: "sms", status: "failed", fellBack, to, error: smsReason };
-  }
+  await prisma.notification.create({
+    data: {
+      studentId, examId, type,
+      channel: d.channel ?? "sms",
+      status: d.ok ? "sent" : "failed",
+      providerSid: d.providerSid,
+      toNumber: to,
+      errorCode: d.errorCode,
+      errorMessage: d.ok ? (d.fellBack ? d.error ?? null : null) : (d.error ?? "Send failed."),
+      sentAt: d.ok ? new Date() : null,
+    },
+  });
+
+  return {
+    ok: d.ok,
+    channel: d.channel,
+    status: d.ok ? "sent" : "failed",
+    fellBack: d.fellBack,
+    to,
+    error: d.error,
+  };
 }
 
 // Convenience wrapper for the result-link use case.

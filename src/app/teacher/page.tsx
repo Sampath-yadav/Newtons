@@ -36,27 +36,30 @@ export default function TeacherLoginPage() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center px-4">
-      <div className="w-full max-w-sm">
-        {/* Logo */}
-        <div className="mb-10 text-center">
+    <section className="flex min-h-screen items-center justify-center bg-[#f8fafc] px-4 py-12">
+      <div className="mx-auto w-full max-w-md">
+        {/* Heading */}
+        <div className="mb-8 text-center">
           <Image
             src="/images/school_logo/Newtons_logo.png"
             alt="Newton's High School"
-            width={140}
-            height={48}
-            className="mx-auto mb-5 brightness-0 invert"
+            width={120}
+            height={40}
+            className="mx-auto mb-4"
           />
-          <h1 className="text-[22px] font-extrabold text-white">Teacher Portal</h1>
-          <p className="mt-1 text-[13px] text-slate-400">
+          <span className="inline-block rounded-full bg-[#EEF0FB] px-3 py-0.5 text-[11px] font-bold uppercase tracking-widest text-brand-navy">
+            Teacher Portal
+          </span>
+          <h1 className="mt-3 text-2xl font-extrabold text-[#1F2A66]">Sign in to continue</h1>
+          <p className="mt-1.5 text-[14px] text-slate-500">
             Newton&apos;s High School — Marks System
           </p>
         </div>
 
-        {/* Form */}
-        <form onSubmit={handleSubmit} className="space-y-4">
+        {/* Card */}
+        <form onSubmit={handleSubmit} className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm space-y-5">
           <div>
-            <label className="mb-1.5 block text-[12px] font-semibold uppercase tracking-wider text-slate-400">
+            <label className="mb-1.5 block text-[12px] font-semibold uppercase tracking-wider text-slate-500">
               Email Address
             </label>
             <input
@@ -66,12 +69,12 @@ export default function TeacherLoginPage() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="you@newtons.edu.in"
-              className="w-full rounded-xl border border-[#30363d] bg-[#161b22] px-4 py-3 text-sm text-white placeholder-slate-600 focus:border-[#F39200] focus:outline-none focus:ring-1 focus:ring-[#F39200]/60 transition-colors"
+              className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-800 placeholder-slate-400 focus:border-brand-navy focus:outline-none focus:ring-1 focus:ring-brand-navy/30 transition-colors"
             />
           </div>
 
           <div>
-            <label className="mb-1.5 block text-[12px] font-semibold uppercase tracking-wider text-slate-400">
+            <label className="mb-1.5 block text-[12px] font-semibold uppercase tracking-wider text-slate-500">
               Password
             </label>
             <input
@@ -81,12 +84,12 @@ export default function TeacherLoginPage() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="••••••••"
-              className="w-full rounded-xl border border-[#30363d] bg-[#161b22] px-4 py-3 text-sm text-white placeholder-slate-600 focus:border-[#F39200] focus:outline-none focus:ring-1 focus:ring-[#F39200]/60 transition-colors"
+              className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-800 placeholder-slate-400 focus:border-brand-navy focus:outline-none focus:ring-1 focus:ring-brand-navy/30 transition-colors"
             />
           </div>
 
           {error && (
-            <div className="rounded-xl border border-red-800/60 bg-red-900/20 px-4 py-3 text-[13px] text-red-400">
+            <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-[13px] text-red-600">
               {error}
             </div>
           )}
@@ -94,16 +97,20 @@ export default function TeacherLoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="mt-2 w-full rounded-xl bg-[#F39200] px-4 py-3.5 text-[14px] font-bold text-white transition-colors hover:bg-[#E58300] disabled:opacity-50"
+            className="flex w-full items-center justify-center gap-2 rounded-xl bg-brand-navy px-4 py-3.5 text-[14px] font-bold text-white transition-colors hover:bg-[#04096a] disabled:opacity-50"
           >
-            {loading ? "Signing in…" : "Sign In"}
+            {loading ? (
+              <><span className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />Signing in…</>
+            ) : (
+              "Sign In"
+            )}
           </button>
         </form>
 
-        <p className="mt-8 text-center text-[12px] text-slate-600">
+        <p className="mt-6 text-center text-[12px] text-slate-500">
           For access issues, contact your school administrator.
         </p>
       </div>
-    </div>
+    </section>
   );
 }

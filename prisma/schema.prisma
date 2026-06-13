@@ -71,6 +71,10 @@ model ResultToken {
   examId    Int
   exam      Exam     @relation(fields: [examId], references: [id])
   createdAt DateTime @default(now())
+
+  // Exactly one token per student per exam — makes publish idempotent and
+  // race-safe, and indexes the (examId, studentId) lookup used when sending.
+  @@unique([examId, studentId])
 }
 
 // channel: "whatsapp" | "sms"
@@ -92,6 +96,24 @@ model Notification {
   sentAt       DateTime?
   deliveredAt  DateTime?
   createdAt    DateTime  @default(now())
+
+  // Per-exam dispatch lookups (latest status per student, "already sent?" checks).
+  @@index([examId, studentId, createdAt])
+}
+
+// Append-only audit of parents opening a result link. Written fire-and-forget
+// from the result-access API so it never blocks the parent page.
+model ResultAccessLog {
+  id        Int      @id @default(autoincrement())
+  token     String
+  studentId Int
+  examId    Int
+  ip        String?
+  userAgent String?
+  createdAt DateTime @default(now())
+
+  @@index([examId, studentId])
+  @@index([token])
 }
 
 model AuditLog {

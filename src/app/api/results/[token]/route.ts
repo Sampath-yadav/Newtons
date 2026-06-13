@@ -3,7 +3,7 @@ import { prisma } from "~/lib/prisma";
 import { getExamConfig, computeStudentResult } from "~/lib/exam-config";
 
 export async function GET(
-  _request: NextRequest,
+  request: NextRequest,
   { params }: { params: Promise<{ token: string }> }
 ) {
   const { token } = await params;
@@ -44,6 +44,14 @@ export async function GET(
   for (const m of marks) markMap[m.subject] = m.value;
 
   const result = computeStudentResult(markMap, config);
+
+  // Audit the access — fire-and-forget so it never blocks or fails the (often
+  // 2G) parent page. Records which token/student/exam was viewed, plus ip/ua.
+  const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? null;
+  const userAgent = request.headers.get("user-agent") ?? null;
+  void prisma.resultAccessLog
+    .create({ data: { token, studentId: resultToken.studentId, examId: resultToken.examId, ip, userAgent } })
+    .catch(() => { /* logging must never break result delivery */ });
 
   // Return subjects in config order, each with its own max — never assume /100.
   const orderedMarks = config.subjects.map((s) => ({

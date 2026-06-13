@@ -66,6 +66,19 @@ export async function GET(
     };
   });
 
+  // Accurate per-status counts (latest notification per student) for the
+  // progress bar and "resend failed only" — a parent counts as sent only when
+  // their latest dispatch actually succeeded.
+  const counts = { total: recipients.length, sent: 0, failed: 0, pending: 0, skipped: 0, notSent: 0 };
+  for (const r of recipients) {
+    const s = r.lastSent?.status;
+    if (s === "sent" || s === "delivered") counts.sent++;
+    else if (s === "failed") counts.failed++;
+    else if (s === "pending") counts.pending++;
+    else if (s === "skipped") counts.skipped++;
+    else counts.notSent++;
+  }
+
   return NextResponse.json({
     exam: {
       id: exam.id,
@@ -75,7 +88,8 @@ export async function GET(
       publishedAt: exam.publishedAt,
     },
     recipients,
-    sentCount: recipients.filter((r) => r.lastSent).length,
+    counts,
+    sentCount: counts.sent,
     testMode: isTestMode(),
     testNumber: isTestMode() ? process.env.NOTIFICATION_TEST_NUMBER ?? null : null,
   });

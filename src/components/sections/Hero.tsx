@@ -1,6 +1,7 @@
 // src/components/sections/Hero.tsx
 "use client";
 
+import { useEffect, useState } from "react";
 import { Button } from "../ui/Button";
 import { Container } from "../layout/Container";
 import { ExpandIcon } from "../icons";
@@ -24,18 +25,37 @@ export function Hero({
   title = "Where confidence grows",
   subtitle = "Growing the world's most curious, confident minds",
 }: HeroProps) {
+  // The hero video is large, so only load it on connections that can afford it.
+  // Data-saver / 2G–3G visitors get the branded gradient hero instead — saving
+  // their data AND the site's Vercel bandwidth budget. Default off so the heavy
+  // request is never made during SSR / first paint.
+  const [loadVideo, setLoadVideo] = useState(false);
+  useEffect(() => {
+    type NetInfo = { saveData?: boolean; effectiveType?: string };
+    const conn = (navigator as Navigator & { connection?: NetInfo }).connection;
+    const slow =
+      !!conn &&
+      (conn.saveData === true ||
+        ["slow-2g", "2g", "3g"].includes(conn.effectiveType ?? ""));
+    if (!slow) setLoadVideo(true);
+  }, []);
+
   return (
     <section className="relative isolate overflow-hidden">
-      {/* Background video — fills the viewport below the sticky navbar */}
-      <div className="relative h-[calc(100dvh-80px)] w-full lg:h-[calc(100vh-100px)]">
-        <video
-          src={videoSrc}
-          autoPlay
-          loop
-          muted
-          playsInline
-          className="absolute inset-0 h-full w-full object-cover"
-        />
+      {/* Background video — fills the viewport below the sticky navbar.
+          Falls back to a solid brand-navy background when the video isn't loaded. */}
+      <div className="relative h-[calc(100dvh-80px)] w-full bg-brand-navy lg:h-[calc(100vh-100px)]">
+        {loadVideo && (
+          <video
+            src={videoSrc}
+            autoPlay
+            loop
+            muted
+            playsInline
+            preload="auto"
+            className="absolute inset-0 h-full w-full object-cover"
+          />
+        )}
         {/* Dark overlay for legibility */}
         <div
           aria-hidden

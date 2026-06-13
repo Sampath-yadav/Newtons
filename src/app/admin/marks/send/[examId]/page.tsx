@@ -60,11 +60,15 @@ export default function SendResultsPage() {
       if (!res.ok) { setError(json.error ?? "Failed to load recipients."); return; }
       const payload = json as ResultsData;
       setData(payload);
-      // Seed status from prior dispatch history.
+      // Seed status from prior dispatch history (server is source of truth, so
+      // the page resumes correctly after a reload — sent stay sent, failures show).
       const initial: Record<number, SendState> = {};
       for (const r of payload.recipients) {
-        if (r.lastSent && r.lastSent.status === "sent") {
-          initial[r.studentId] = { state: "sent", channel: r.lastSent.channel, fellBack: false };
+        const s = r.lastSent?.status;
+        if (s === "sent" || s === "delivered") {
+          initial[r.studentId] = { state: "sent", channel: r.lastSent!.channel, fellBack: false };
+        } else if (s === "failed") {
+          initial[r.studentId] = { state: "failed", error: "Previous attempt failed — resend to retry." };
         }
       }
       setStatusMap(initial);
@@ -99,30 +103,56 @@ export default function SendResultsPage() {
     }
   }, [examId]);
 
+  // Bulk send runs as a client-driven loop over a batched, idempotent endpoint:
+  // each call sends the next batch and reports how many remain, so 600 parents
+  // never hit a single-request timeout, already-sent parents are skipped, and a
+  // re-click retries only the failures. Resumable — server is the source of truth.
+  type BatchResult = { studentId: number; ok: boolean; channel: string | null; status: string; fellBack: boolean; error?: string };
+
   async function sendAll() {
     if (!examId) return;
     setSendingAll(true);
     setAllSummary("");
-    // Mark everyone as sending for immediate feedback.
+    // Mark not-yet-sent recipients as sending for immediate feedback.
     setStatusMap((p) => {
       const next = { ...p };
-      data?.recipients.forEach((r) => { next[r.studentId] = { state: "sending" }; });
+      data?.recipients.forEach((r) => {
+        if (next[r.studentId]?.state !== "sent") next[r.studentId] = { state: "sending" };
+      });
       return next;
     });
+
+    let totalSent = 0, totalFailed = 0, totalSkipped = 0, guard = 0;
     try {
-      const res = await fetch(`/api/admin/exams/${examId}/results/send-all`, { method: "POST" });
-      const json = await res.json();
-      if (!res.ok) { setAllSummary(json.error ?? "Bulk send failed."); return; }
-      const next: Record<number, SendState> = {};
-      for (const r of json.results as Array<{ studentId: number; ok: boolean; channel: string | null; fellBack: boolean; error?: string }>) {
-        next[r.studentId] = r.ok
-          ? { state: "sent", channel: r.channel, fellBack: r.fellBack }
-          : { state: "failed", error: r.error };
+      for (;;) {
+        if (++guard > 2000) break; // safety valve
+        const res = await fetch(`/api/admin/exams/${examId}/results/send-all`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ mode: "pending" }),
+        });
+        const json = await res.json();
+        if (!res.ok) { setAllSummary(json.error ?? "Bulk send failed."); break; }
+
+        setStatusMap((p) => {
+          const next = { ...p };
+          for (const r of json.results as BatchResult[]) {
+            next[r.studentId] = r.ok
+              ? { state: "sent", channel: r.channel, fellBack: r.fellBack }
+              : { state: "failed", error: r.error ?? (r.status === "skipped" ? "Skipped." : "Send failed.") };
+          }
+          return next;
+        });
+
+        totalSent += json.sent; totalFailed += json.failed; totalSkipped += json.skipped;
+        setAllSummary(`Sending… ${totalSent} sent${totalFailed ? `, ${totalFailed} failed` : ""}${totalSkipped ? `, ${totalSkipped} skipped` : ""} · ${json.remaining} remaining`);
+
+        // Stop when nothing remains or a batch made no progress (e.g. all in-flight).
+        if (json.remaining === 0 || json.processed === 0) break;
       }
-      setStatusMap((p) => ({ ...p, ...next }));
-      setAllSummary(`Sent ${json.sent} of ${json.total}${json.failed ? ` · ${json.failed} failed` : ""}.`);
+      setAllSummary(`Done. ${totalSent} sent${totalFailed ? ` · ${totalFailed} failed` : ""}${totalSkipped ? ` · ${totalSkipped} skipped` : ""}.`);
     } catch {
-      setAllSummary("Network error during bulk send.");
+      setAllSummary("Network error during bulk send. Click “Send to all” again to resume.");
     } finally {
       setSendingAll(false);
     }

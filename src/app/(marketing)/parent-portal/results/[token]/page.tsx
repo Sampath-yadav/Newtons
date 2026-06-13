@@ -1,6 +1,8 @@
-import Image from "next/image";
-import Link from "next/link";
 import { Container } from "~/components/layout/Container";
+
+// Kept deliberately light for parents on slow (2G) connections: a pure Server
+// Component that streams plain HTML — no client JS, no web fonts, no images.
+// Marks are visible the instant the HTML arrives.
 
 interface Mark {
   subject: string;
@@ -74,9 +76,9 @@ export default async function ResultPage({
         <p className="mt-2 text-[15px] text-[#6B7280]">
           This link is invalid or results are not yet published.
         </p>
-        <Link href="/" className="mt-6 text-[14px] text-[#060C8B] hover:underline">
+        <a href="/" className="mt-6 text-[14px] text-[#060C8B] hover:underline">
           Return to Newton&apos;s High School →
-        </Link>
+        </a>
       </div>
     );
   }
@@ -89,14 +91,10 @@ export default async function ResultPage({
       {/* ── Mini header (no full navbar needed for this result page) ── */}
       <header className="border-b border-slate-100 bg-white py-4">
         <Container>
-          <div className="flex items-center gap-3">
-            <Image
-              src="/images/school_logo/Newtons_logo.png"
-              alt="Newton's High School"
-              width={120}
-              height={40}
-            />
-          </div>
+          {/* Text wordmark instead of a logo image — avoids a heavy PNG download on 2G. */}
+          <span className="text-lg font-extrabold tracking-tight text-[#060C8B]">
+            NEWTON&apos;S <span className="text-[#F39200]">HIGH SCHOOL</span>
+          </span>
         </Container>
       </header>
 
