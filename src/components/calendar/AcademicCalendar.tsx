@@ -1,8 +1,7 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { Container } from "~/components/layout/Container";
-import { Button } from "~/components/ui/Button";
 import { ImageFrame } from "~/components/ui/ImageFrame";
 
 /* ── Constants ────────────────────────────────────────────────────────────── */

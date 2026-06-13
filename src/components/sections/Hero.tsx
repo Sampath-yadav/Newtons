@@ -22,7 +22,7 @@ interface HeroProps {
  */
 export function Hero({
   videoSrc = "/videos/hero/campus.mp4",
-  title = "Where confidence grows",
+  title = "Knowledge, Perseverance & Excellence",
   subtitle = "Growing the world's most curious, confident minds",
 }: HeroProps) {
   // The hero video is large, so only load it on connections that can afford it.

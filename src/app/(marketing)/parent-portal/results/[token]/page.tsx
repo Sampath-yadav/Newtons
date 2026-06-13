@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Container } from "~/components/layout/Container";
 
 // Kept deliberately light for parents on slow (2G) connections: a pure Server
@@ -76,9 +77,9 @@ export default async function ResultPage({
         <p className="mt-2 text-[15px] text-[#6B7280]">
           This link is invalid or results are not yet published.
         </p>
-        <a href="/" className="mt-6 text-[14px] text-[#060C8B] hover:underline">
+        <Link href="/" className="mt-6 text-[14px] text-[#060C8B] hover:underline">
           Return to Newton&apos;s High School →
-        </a>
+        </Link>
       </div>
     );
   }

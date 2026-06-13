@@ -12,17 +12,17 @@ const ACCREDITATIONS = [
   {
     id: "telangana",
     name: "Government of Telangana — School Education Department",
-    logo: "/images/accreditations/telangana-government-recognition.png",
-    width: 96,
-    height: 96,
+    logo: "/images/accreditations/rte-compliance.png",
+    width: 150,
+    height: 150,
     caption: "Recognized by the School Education Department, Government of Telangana",
   },
   {
     id: "rte",
     name: "Right to Education (RTE) Compliance",
-    logo: "/images/accreditations/rte-compliance.png",
-    width: 96,
-    height: 96,
+    logo: "/images/accreditations/telangana-government-recognition.png",
+    width: 180,
+    height: 180,
     caption: "Committed to the principles of the Right to Education Act",
   },
 ];
@@ -52,7 +52,7 @@ export function Accreditations() {
         <div
           className="
             flex flex-wrap items-center justify-center
-            gap-10 md:gap-16 lg:gap-20
+            gap-x-10 gap-y-4 md:gap-16 lg:gap-20
           "
           role="list"
           aria-label="Accreditation logos"
@@ -63,23 +63,17 @@ export function Accreditations() {
               role="listitem"
               className="flex flex-col items-center gap-2 group"
             >
-              {/* Logo */}
-              <div
-                className="
-                  relative flex items-center justify-center
-                  transition-transform duration-300
-                  group-hover:scale-105
-                "
-                style={{ width: item.width, height: item.height }}
-              >
-                <Image
-                  src={item.logo}
-                  alt={item.name}
-                  fill
-                  sizes={`${item.width}px`}
-                  className="object-contain"
-                />
-              </div>
+              {/* Logo — fixed width, auto height so the box hugs the logo
+                  (no vertical letterboxing for wide/short marks). */}
+              <Image
+                src={item.logo}
+                alt={item.name}
+                width={item.width}
+                height={item.height}
+                sizes={`${item.width}px`}
+                className="h-auto object-contain transition-transform duration-300 group-hover:scale-105"
+                style={{ width: item.width }}
+              />
 
               {/* Optional caption beneath logo */}
               {item.caption && (

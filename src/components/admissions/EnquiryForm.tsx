@@ -347,13 +347,13 @@ function Field({
   id,
   label,
   required,
-  error,
   className = "",
   children,
 }: {
   id: string;
   label: string;
   required?: boolean;
+  /** Accepted for call-site symmetry; error text is rendered via <ErrorMsg>. */
   error?: string;
   className?: string;
   children: React.ReactNode;

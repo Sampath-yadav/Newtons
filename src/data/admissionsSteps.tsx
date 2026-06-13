@@ -66,9 +66,9 @@ export const ADMISSIONS_STEPS: Record<AdmissionsAudience, AdmissionStep[]> = {
       title: "Application submission",
       body: (
         <>
-          Once you're ready to apply, the admissions form can be completed
+          Once you&apos;re ready to apply, the admissions form can be completed
           online or in person. Along with the form, we ask families to provide
-          supporting documents such as the child's birth certificate and
+          supporting documents such as the child&apos;s birth certificate and
           previous school reports.
         </>
       ),
@@ -80,7 +80,7 @@ export const ADMISSIONS_STEPS: Record<AdmissionsAudience, AdmissionStep[]> = {
       title: "Assessment and interaction",
       body: (
         <>
-          To help us understand each child's needs and readiness, applicants
+          To help us understand each child&apos;s needs and readiness, applicants
           may be invited to take part in an age-appropriate assessment or a
           short interaction session, depending on the year group.
         </>
@@ -93,9 +93,9 @@ export const ADMISSIONS_STEPS: Record<AdmissionsAudience, AdmissionStep[]> = {
       title: "Offer & enrolment",
       body: (
         <>
-          Following a successful assessment, you'll receive an offer letter
+          Following a successful assessment, you&apos;ll receive an offer letter
           and details of next steps. Completing enrolment confirms your
-          child's place at Newton's High School.
+          child&apos;s place at Newton&apos;s High School.
         </>
       ),
     },
