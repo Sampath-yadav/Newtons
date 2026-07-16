@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "~/components/ui/Button";
@@ -8,6 +9,12 @@ import { CurriculumTabs } from "~/components/learning-journey/CurriculumTabs";
 import { StatsSection } from "~/components/learning-journey/StatsSection";
 import { PRIMARY_SCHOOL } from "~/data/learning-journey";
 import type { IconKey } from "~/data/learning-journey";
+
+export const metadata: Metadata = {
+  title: "Primary School in Banswada | Classes 1–5 | Newton's High School Telangana",
+  description:
+    "Newton's High School, Banswada offers a strong Telangana SSC Primary programme for Classes 1 to 5. Activity-based learning, trilingual instruction, and experienced teachers in a safe, disciplined campus in Kamareddy, Telangana.",
+};
 
 /* ── Icon lookup ────────────────────────────────────────────────────────── */
 
@@ -106,7 +113,7 @@ export default function PrimaryPage() {
       <section className="relative h-[460px] lg:h-[560px] overflow-hidden">
         <Image
           src={d.heroImage}
-          alt="Newton's Primary School — curious young learners"
+          alt="Primary School students at Newton's High School Banswada in an active classroom lesson — Classes 1 to 5"
           fill
           className="object-cover object-center"
           priority
@@ -223,73 +230,128 @@ export default function PrimaryPage() {
         </Container>
       </section>
 
-      {/* ── Core Learning Pillars ── */}
+      {/* ── Newton's Real Activities ── */}
       <section className="py-16 lg:py-24 bg-white">
         <Container>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-            <div>
-              <span className="mb-3 inline-block text-[11px] font-bold uppercase tracking-widest text-brand-orange">
-                Learning Philosophy
-              </span>
-              <h2 className="text-3xl lg:text-4xl font-extrabold text-brand-ink mb-5 leading-tight">
-                {d.pillarsHeading}
-              </h2>
-              <p className="text-[15px] text-brand-muted leading-relaxed mb-8">{d.pillarsBody}</p>
-              <ul className="space-y-4">
-                {d.pillarsPoints.map((point) => (
-                  <li key={point} className="flex items-start gap-3 text-[14.5px] text-brand-ink">
-                    <span className="mt-[6px] h-2 w-2 shrink-0 rounded-full bg-brand-orange" />
-                    {point}
-                  </li>
-                ))}
-              </ul>
-            </div>
+          <div className="max-w-2xl mx-auto text-center mb-12">
+            <span className="mb-3 inline-block text-[11px] font-bold uppercase tracking-widest text-brand-orange">
+              Life at Newton&apos;s Primary — Beyond the Syllabus
+            </span>
+            <h2 className="text-3xl lg:text-4xl font-extrabold text-brand-ink mb-4">
+              What Makes Newton&apos;s Primary School Unique in Banswada
+            </h2>
+            <p className="text-[15px] text-brand-muted leading-relaxed">
+              At Newton&apos;s High School, Banswada, Primary students participate in meaningful school-wide
+              experiences that go far beyond the textbook — rooted in our school&apos;s values and the
+              local community.
+            </p>
+          </div>
 
-            <div className="grid grid-cols-2 gap-4">
-              <div className="relative col-span-2 h-[220px] rounded-2xl overflow-hidden shadow-card-lg">
-                <Image
-                  src={d.pillarsImages[0].image}
-                  alt={d.pillarsImages[0].label}
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 1024px) 100vw, 50vw"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
-                <span className="absolute bottom-3 left-4 text-sm font-semibold text-white">
-                  {d.pillarsImages[0].label}
-                </span>
-              </div>
-              {d.pillarsImages.slice(1).map((p) => (
-                <div key={p.label} className="relative h-[160px] rounded-2xl overflow-hidden shadow-card">
-                  <Image
-                    src={p.image}
-                    alt={p.label}
-                    fill
-                    className="object-cover"
-                    sizes="25vw"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
-                  <span className="absolute bottom-3 left-3 text-xs font-semibold text-white">
-                    {p.label}
-                  </span>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            {d.activities.map((item, i) => {
+              const ICONS_ACT = ["🌿", "📵", "🎓", "🪔"];
+              return (
+                <div
+                  key={item.title}
+                  className="group rounded-2xl border border-slate-100 bg-white shadow-card p-7 hover:shadow-card-lg hover:-translate-y-1 transition-all duration-300"
+                >
+                  <div className="mb-4 text-3xl">{ICONS_ACT[i]}</div>
+                  <h3 className="text-base font-bold text-brand-ink mb-3">{item.title}</h3>
+                  <p className="text-sm text-brand-muted leading-relaxed">{item.body}</p>
                 </div>
-              ))}
-            </div>
+              );
+            })}
           </div>
         </Container>
       </section>
 
-      {/* ── When to enrol ── */}
-      <section className="py-16 lg:py-20" style={{ background: "#f7f8fd" }}>
+      {/* ── Teaching Philosophy ── */}
+      <section className="py-16 lg:py-24" style={{ background: "#f7f8fd" }}>
+        <Container>
+          <div className="max-w-2xl mx-auto text-center mb-12">
+            <span className="mb-3 inline-block text-[11px] font-bold uppercase tracking-widest text-brand-orange">
+              Our Teaching Philosophy
+            </span>
+            <h2 className="text-3xl lg:text-4xl font-extrabold text-brand-ink mb-4 leading-tight">
+              {d.pillarsHeading}
+            </h2>
+            <p className="text-[15px] text-brand-muted leading-relaxed">{d.pillarsBody}</p>
+          </div>
+
+          {/* 6 philosophy pillar cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-14">
+            {d.philosophyPillars.map((pillar) => (
+              <div
+                key={pillar.title}
+                className="group rounded-2xl bg-white border border-slate-100 shadow-card p-6 hover:shadow-card-lg hover:-translate-y-1 transition-all duration-300"
+              >
+                <div className="mb-3 h-1 w-8 rounded-full bg-brand-orange" />
+                <h3 className="text-[14.5px] font-bold text-brand-ink mb-2 leading-snug">{pillar.title}</h3>
+                <p className="text-[13px] text-brand-muted leading-relaxed">{pillar.body}</p>
+              </div>
+            ))}
+          </div>
+
+          {/* 3 achievement image pillars */}
+          <div className="grid grid-cols-2 gap-4 max-w-2xl mx-auto">
+            <div className="relative col-span-2 h-[220px] rounded-2xl overflow-hidden shadow-card-lg">
+              <Image
+                src={d.pillarsImages[0].image}
+                alt={d.pillarsImages[0].label}
+                fill
+                className="object-cover"
+                sizes="(max-width: 1024px) 100vw, 660px"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+              <span className="absolute bottom-3 left-4 text-sm font-semibold text-white">
+                {d.pillarsImages[0].label}
+              </span>
+            </div>
+            {d.pillarsImages.slice(1).map((p) => (
+              <div key={p.label} className="relative h-[160px] rounded-2xl overflow-hidden shadow-card">
+                <Image
+                  src={p.image}
+                  alt={p.label}
+                  fill
+                  className="object-cover"
+                  sizes="330px"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+                <span className="absolute bottom-3 left-3 text-xs font-semibold text-white">
+                  {p.label}
+                </span>
+              </div>
+            ))}
+          </div>
+        </Container>
+      </section>
+
+      {/* ── Admissions CTA ── */}
+      <section className="py-16 lg:py-20 bg-white">
         <Container>
           <div className="max-w-xl mx-auto text-center">
-            <h2 className="text-3xl lg:text-4xl font-extrabold text-brand-ink mb-4">
+            <span className="mb-3 inline-block text-[11px] font-bold uppercase tracking-widest text-brand-orange">
+              Primary School Admissions — Banswada
+            </span>
+            <h2 className="text-3xl lg:text-4xl font-extrabold text-brand-ink mb-5 leading-tight">
               {d.enrollHeading}
             </h2>
             <p className="text-[15px] text-brand-muted leading-relaxed mb-8">{d.enrollBody}</p>
-            <Button href="/admissions/enquire-now" size="lg">
-              Grow with confidence! Apply now
-            </Button>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-6">
+              <Button href="/admissions/enquire-now" size="lg">
+                Apply for Primary School Admission
+              </Button>
+              <Button href="/admissions/how-to-apply" size="lg" variant="outline-navy">
+                Book a Free Campus Visit
+              </Button>
+            </div>
+            <p className="text-[13px] text-brand-muted">
+              Call us on{" "}
+              <a href="tel:+919866089343" className="font-semibold text-brand-navy hover:text-brand-orange transition-colors">
+                098660 89343
+              </a>{" "}
+              · Bodhan Road, Banswada, Kamareddy – 503187, Telangana
+            </p>
           </div>
         </Container>
       </section>

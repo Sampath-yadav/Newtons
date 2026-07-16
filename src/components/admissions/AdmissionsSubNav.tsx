@@ -4,7 +4,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const LINKS = [
-  { label: "How to apply", href: "/admissions/how-to-apply" },
   { label: "Tuition fees", href: "/admissions/tuition-fees" },
   { label: "Enquire now", href: "/admissions/enquire-now" },
 ];

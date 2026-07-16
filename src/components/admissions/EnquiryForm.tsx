@@ -6,7 +6,9 @@ import { Button } from "~/components/ui/Button";
 /* ── Data ─────────────────────────────────────────────────────────────── */
 
 const GRADES = [
-  "Pre-Primary (Ages 3½ – 5½)",
+  "Pre-Primary — Nursery (Age 3½)",
+  "Pre-Primary — LKG (Age 4)",
+  "Pre-Primary — UKG (Age 5)",
   "Class 1 (Age 6)",
   "Class 2 (Age 7)",
   "Class 3 (Age 8)",
@@ -16,7 +18,7 @@ const GRADES = [
   "Class 7 (Age 12)",
   "Class 8 (Age 13)",
   "Class 9 (Age 14)",
-  "Class 10 / SSC (Age 15 – 16)",
+  "Class 10 / SSC (Ages 15–16)",
 ];
 
 const ACADEMIC_YEARS = ["2025 – 2026", "2026 – 2027", "2027 – 2028"];
@@ -128,12 +130,18 @@ export function EnquiryForm() {
             <polyline points="20 6 9 17 4 12" />
           </svg>
         </div>
-        <h3 className="mb-2 text-xl font-extrabold text-brand-ink">
-          Enquiry received!
+        <h3 className="mb-3 text-xl font-extrabold text-brand-ink">
+          Thank you for getting in touch.
         </h3>
-        <p className="mx-auto max-w-sm text-[15px] text-brand-muted">
-          Thank you for your interest in Newton&apos;s High School. Our
-          admissions team will be in touch within 2 working days.
+        <p className="mx-auto max-w-sm text-[15px] leading-relaxed text-brand-muted">
+          Our admissions team at Newton&apos;s High School, Banswada will review your
+          enquiry and contact you within one working day. If you have an urgent
+          question, you can also reach us directly on{" "}
+          <span className="font-semibold text-brand-ink">098660 89343</span> during
+          school hours (Monday to Saturday, 9:00 AM to 4:00 PM).
+        </p>
+        <p className="mt-4 text-[15px] font-medium text-brand-navy">
+          We look forward to welcoming your family to Newton&apos;s.
         </p>
       </div>
     );
@@ -144,18 +152,13 @@ export function EnquiryForm() {
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
 
         {/* Parent / Guardian Name */}
-        <Field
-          id="parentName"
-          label="Parent / Guardian Name"
-          required
-          error={errors.parentName}
-        >
+        <Field id="parentName" label="Parent / Guardian Name" required error={errors.parentName}>
           <input
             id="parentName"
             type="text"
             value={form.parentName}
             onChange={(e) => update("parentName", e.target.value)}
-            placeholder="Parent / Guardian Name"
+            placeholder="Your full name"
             className={inputClass(!!errors.parentName)}
             aria-describedby={errors.parentName ? "parentName-err" : undefined}
             aria-invalid={!!errors.parentName}
@@ -172,7 +175,7 @@ export function EnquiryForm() {
             type="text"
             value={form.studentName}
             onChange={(e) => update("studentName", e.target.value)}
-            placeholder="Student Name"
+            placeholder="Your child's full name"
             className={inputClass(!!errors.studentName)}
             aria-describedby={errors.studentName ? "studentName-err" : undefined}
             aria-invalid={!!errors.studentName}
@@ -183,13 +186,13 @@ export function EnquiryForm() {
         </Field>
 
         {/* Email */}
-        <Field id="email" label="E-mail" required error={errors.email}>
+        <Field id="email" label="Email Address" required error={errors.email}>
           <input
             id="email"
             type="email"
             value={form.email}
             onChange={(e) => update("email", e.target.value)}
-            placeholder="E-mail"
+            placeholder="your@email.com"
             className={inputClass(!!errors.email)}
             aria-describedby={errors.email ? "email-err" : undefined}
             aria-invalid={!!errors.email}
@@ -204,7 +207,7 @@ export function EnquiryForm() {
             type="tel"
             value={form.mobile}
             onChange={(e) => update("mobile", e.target.value)}
-            placeholder="Mobile Number"
+            placeholder="10-digit mobile number"
             className={inputClass(!!errors.mobile)}
             aria-describedby={errors.mobile ? "mobile-err" : undefined}
             aria-invalid={!!errors.mobile}
@@ -215,12 +218,7 @@ export function EnquiryForm() {
         </Field>
 
         {/* Grade Applying For */}
-        <Field
-          id="grade"
-          label="Grade Applying For"
-          required
-          error={errors.grade}
-        >
+        <Field id="grade" label="Grade Applying For" required error={errors.grade}>
           <div className="relative">
             <select
               id="grade"
@@ -230,7 +228,7 @@ export function EnquiryForm() {
               aria-describedby={errors.grade ? "grade-err" : undefined}
               aria-invalid={!!errors.grade}
             >
-              <option value="">Grade Applying For</option>
+              <option value="">Select a class</option>
               {GRADES.map((g) => (
                 <option key={g} value={g}>{g}</option>
               ))}
@@ -240,8 +238,8 @@ export function EnquiryForm() {
           {errors.grade && <ErrorMsg id="grade-err">{errors.grade}</ErrorMsg>}
         </Field>
 
-        {/* Academic Year */}
-        <Field id="academicYear" label="Academic Year">
+        {/* Preferred Academic Year */}
+        <Field id="academicYear" label="Preferred Academic Year">
           <div className="relative">
             <select
               id="academicYear"
@@ -249,7 +247,7 @@ export function EnquiryForm() {
               onChange={(e) => update("academicYear", e.target.value)}
               className={inputClass() + " cursor-pointer appearance-none pr-10"}
             >
-              <option value="">Academic Year</option>
+              <option value="">Select a year</option>
               {ACADEMIC_YEARS.map((y) => (
                 <option key={y} value={y}>{y}</option>
               ))}
@@ -259,28 +257,27 @@ export function EnquiryForm() {
         </Field>
 
         {/* Address */}
-        <Field id="address" label="Address" className="sm:col-span-2">
+        <Field id="address" label="Your Address (Area / Locality)" className="sm:col-span-2">
           <input
             id="address"
             type="text"
             value={form.address}
             onChange={(e) => update("address", e.target.value)}
-            placeholder="Address"
+            placeholder="Area or locality in Banswada or Nizamabad"
             className={inputClass()}
           />
+          <p className="mt-1.5 text-[12px] text-brand-muted">
+            This helps us check bus route availability for your area.
+          </p>
         </Field>
 
         {/* Message */}
-        <Field
-          id="message"
-          label="Additional Notes / Message"
-          className="sm:col-span-2"
-        >
+        <Field id="message" label="Additional Notes or Questions" className="sm:col-span-2">
           <textarea
             id="message"
             value={form.message}
             onChange={(e) => update("message", e.target.value)}
-            placeholder="Any additional information or questions about admissions…"
+            placeholder="Any specific questions, concerns, or information you would like to share about your child."
             rows={4}
             className={inputClass() + " resize-none"}
           />
@@ -297,11 +294,10 @@ export function EnquiryForm() {
             className="mt-0.5 h-4 w-4 shrink-0 cursor-pointer accent-brand-navy"
           />
           <span className="text-xs leading-relaxed text-brand-muted">
-            I acknowledge that I am sharing my contact information with
-            Newton&apos;s High School to learn more about my child&apos;s
-            education. I consent to the Newton&apos;s School team reaching out
-            to me with further details via Phone Calls, Text Messages, or
-            Emails.{" "}
+            I understand that by submitting this form I am sharing my contact details
+            with Newton&apos;s High School, Banswada, so that the admissions team can
+            get in touch with me regarding my child&apos;s education. I am happy to be
+            contacted by phone, SMS, or email for this purpose.{" "}
             <span className="text-red-500" aria-hidden>*</span>
           </span>
         </label>
@@ -334,7 +330,7 @@ export function EnquiryForm() {
           className="min-w-[160px]"
           disabled={!consent || submitting}
         >
-          {submitting ? "Submitting…" : "Submit"}
+          {submitting ? "Submitting…" : "Submit Enquiry"}
         </Button>
       </div>
     </form>
@@ -353,17 +349,13 @@ function Field({
   id: string;
   label: string;
   required?: boolean;
-  /** Accepted for call-site symmetry; error text is rendered via <ErrorMsg>. */
   error?: string;
   className?: string;
   children: React.ReactNode;
 }) {
   return (
     <div className={className}>
-      <label
-        htmlFor={id}
-        className="mb-1.5 block text-[13px] font-medium text-brand-navy"
-      >
+      <label htmlFor={id} className="mb-1.5 block text-[13px] font-medium text-brand-navy">
         {label}
         {required && (
           <span className="ml-0.5 text-red-500" aria-hidden>*</span>

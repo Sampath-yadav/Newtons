@@ -12,9 +12,9 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Newton's High School – Where Confidence Grows",
+  title: "Newton's High School, Banswada – Where Confidence Grows",
   description:
-    "Newton's High School in Hyderabad offering Cambridge and SSC pathways for ages 3 to 18.",
+    "Newton's High School, Banswada — a co-educational Telangana SSC school offering quality education from Pre-Primary to Grade 10 in Kamareddy district.",
 };
 
 export default function RootLayout({

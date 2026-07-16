@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "~/components/ui/Button";
@@ -7,6 +8,14 @@ import { StageNav } from "~/components/learning-journey/StageNav";
 import { CurriculumTabs } from "~/components/learning-journey/CurriculumTabs";
 import { SECONDARY_SCHOOL } from "~/data/learning-journey";
 import type { IconKey } from "~/data/learning-journey";
+
+export const metadata: Metadata = {
+  title: "SSC School in Banswada | Classes 9 & 10 | Newton's High School Telangana",
+  description:
+    "Newton's High School, Banswada offers focused Telangana SSC Board preparation for Classes 9 and 10. Experienced subject teachers, structured exam framework, individual mentoring, and a disciplined campus environment in Nizamabad, Telangana.",
+  keywords:
+    "SSC School Banswada, Class 9 10 School Banswada, Telangana SSC Board Preparation, Best SSC School Nizamabad, Newton's High School Banswada, 10th Board Exam Preparation Telangana, SSC Results Banswada",
+};
 
 /* ── Icon lookup ────────────────────────────────────────────────────────── */
 
@@ -134,26 +143,29 @@ export default function SecondarySscPage() {
   return (
     <>
       {/* ── Hero ── */}
-      <section className="relative h-[480px] lg:h-[580px] overflow-hidden">
+      <section className="relative h-[460px] lg:h-[560px] overflow-hidden">
         <Image
           src={d.heroImage}
-          alt="Newton's Secondary School — SSC excellence"
+          alt="Class 9 and 10 students at Newton's High School Banswada studying for Telangana SSC Board Examinations"
           fill
           className="object-cover object-center"
           priority
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#060C8B]/92 via-[#060C8B]/65 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#060C8B]/90 via-[#060C8B]/60 to-transparent" />
         <div className="absolute inset-0 flex items-end lg:items-center pb-12 lg:pb-0">
           <Container>
-            <div className="max-w-xl">
+            <div className="max-w-lg">
               <span className="mb-4 inline-block rounded-full border border-brand-orange/50 bg-brand-orange/15 px-3 py-1 text-[11px] font-bold uppercase tracking-widest text-brand-orange">
                 {d.agesLabel}
               </span>
-              <h1 className="text-4xl lg:text-[3.75rem] font-extrabold text-white leading-tight mb-4">
+              <h1 className="text-4xl lg:text-6xl font-extrabold text-white leading-tight mb-4">
                 Excellence in<br />SSC Education
               </h1>
-              <p className="text-base lg:text-lg text-white/80 mb-8 leading-relaxed max-w-md">
+              <p className="text-sm font-semibold italic text-brand-orange/90 mb-3 leading-relaxed">
                 {d.heroTagline}
+              </p>
+              <p className="text-base lg:text-lg text-white/80 mb-8 leading-relaxed">
+                {d.heroDescription}
               </p>
               <div className="flex flex-wrap gap-3">
                 <Button href="/admissions/enquire-now" size="lg">Enquire Now</Button>
@@ -180,11 +192,11 @@ export default function SecondarySscPage() {
         </Container>
       </nav>
 
-      {/* ── Why Choose Our SSC Program (4 features) ── */}
+      {/* ── Why Choose Newton's SSC (4 features) ── */}
       <section className="py-16 lg:py-24 bg-white">
         <Container>
           <div className="max-w-3xl mx-auto text-center mb-14">
-            <SectionLabel>SSC Programme</SectionLabel>
+            <SectionLabel>Why Families in Banswada Choose Newton&apos;s for SSC</SectionLabel>
             <h2 className="text-3xl lg:text-[42px] font-extrabold text-brand-ink leading-tight mb-5">
               {d.introHeading}
             </h2>
@@ -208,22 +220,22 @@ export default function SecondarySscPage() {
         </Container>
       </section>
 
-      {/* ── Student Success & Academic Results (6 KPIs) ── */}
+      {/* ── Honest Achievement Statement (4 stat cards) ── */}
       <section className="py-16 lg:py-24" style={{ background: "#ECEAFB" }}>
         <Container>
           <SectionHeader
-            label="Board Results"
+            label="Our Students&apos; Success"
             heading={d.statsHeading}
             body={d.statsBody}
           />
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-5 max-w-4xl mx-auto">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-5 max-w-5xl mx-auto">
             {d.stats.map((stat, i) => (
               <div
                 key={i}
                 className="rounded-2xl bg-white p-7 text-center shadow-card hover:shadow-card-lg hover:-translate-y-1 transition-all duration-300"
               >
-                <div className="text-4xl lg:text-5xl font-extrabold text-brand-orange mb-3 leading-none">
+                <div className="text-3xl lg:text-4xl font-extrabold text-brand-orange mb-3 leading-none">
                   {stat.value}
                 </div>
                 <div className="mb-3 mx-auto h-px w-10 bg-slate-200" />
@@ -238,7 +250,7 @@ export default function SecondarySscPage() {
       <section className="py-16 lg:py-24 bg-white">
         <Container>
           <SectionHeader
-            label="Academics"
+            label="Telangana SSC Curriculum"
             heading={d.curriculumHeading}
             body={d.curriculumBody}
           />
@@ -250,7 +262,7 @@ export default function SecondarySscPage() {
       <section className="py-16 lg:py-24" style={{ background: "#f7f8fd" }}>
         <Container>
           <SectionHeader
-            label="Exam Readiness"
+            label="SSC Board Exam Preparation"
             heading={d.examHeading}
             body={d.examBody}
           />
@@ -261,7 +273,6 @@ export default function SecondarySscPage() {
                 key={item.step}
                 className="group relative rounded-2xl bg-white border border-slate-100 shadow-card p-7 hover:shadow-card-lg hover:-translate-y-1 transition-all duration-300 overflow-hidden"
               >
-                {/* Large ghost step number */}
                 <span
                   className="pointer-events-none absolute -top-3 -right-2 text-[72px] font-extrabold leading-none select-none"
                   style={{ color: "rgba(243,146,0,0.08)" }}
@@ -269,7 +280,6 @@ export default function SecondarySscPage() {
                 >
                   {item.step}
                 </span>
-                {/* Visible step badge */}
                 <span className="mb-4 inline-flex h-9 w-9 items-center justify-center rounded-full bg-brand-orange text-white text-[13px] font-extrabold leading-none">
                   {item.step}
                 </span>
@@ -284,7 +294,11 @@ export default function SecondarySscPage() {
       {/* ── Typical Day ── */}
       <section className="py-16 lg:py-24 bg-white">
         <Container>
-          <SectionHeader heading={d.typicalDayHeading} body={d.typicalDayBody} />
+          <SectionHeader
+            label="Daily Schedule"
+            heading={d.typicalDayHeading}
+            body={d.typicalDayBody}
+          />
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {d.typicalDay.map((item) => (
@@ -311,7 +325,7 @@ export default function SecondarySscPage() {
       <section className="py-16 lg:py-24" style={{ background: "#f7f8fd" }}>
         <Container>
           <SectionHeader
-            label="Student Support"
+            label="Student Academic Support"
             heading={d.supportHeading}
             body={d.supportBody}
           />
@@ -335,11 +349,11 @@ export default function SecondarySscPage() {
         </Container>
       </section>
 
-      {/* ── Science & Innovation (6 image tiles) ── */}
+      {/* ── Science & Practical Learning (6 image tiles) ── */}
       <section className="py-16 lg:py-24 bg-white">
         <Container>
           <SectionHeader
-            label="Hands-On Learning"
+            label="Hands-On Science at Newton&apos;s"
             heading={d.scienceHeading}
             body={d.scienceBody}
           />
@@ -367,11 +381,37 @@ export default function SecondarySscPage() {
         </Container>
       </section>
 
-      {/* ── Leadership & Life Skills ── */}
+      {/* ── Newton's Real Activities (4 cards) ── */}
       <section className="py-16 lg:py-24" style={{ background: "#f7f8fd" }}>
         <Container>
+          <div className="max-w-2xl mx-auto text-center mb-12">
+            <SectionLabel>Life at Newton&apos;s Secondary School</SectionLabel>
+            <h2 className="text-3xl lg:text-4xl font-extrabold text-brand-ink mb-4">
+              {d.schoolActivitiesHeading}
+            </h2>
+            <p className="text-[15px] text-brand-muted leading-relaxed">{d.schoolActivitiesBody}</p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            {d.schoolActivities.map((item) => (
+              <div
+                key={item.title}
+                className="group rounded-2xl border border-slate-100 bg-white shadow-card p-7 hover:shadow-card-lg hover:-translate-y-1 transition-all duration-300"
+              >
+                <div className="mb-4 text-3xl">{item.icon}</div>
+                <h3 className="text-base font-bold text-brand-ink mb-3">{item.title}</h3>
+                <p className="text-sm text-brand-muted leading-relaxed">{item.body}</p>
+              </div>
+            ))}
+          </div>
+        </Container>
+      </section>
+
+      {/* ── Leadership & Life Skills ── */}
+      <section className="py-16 lg:py-24 bg-white">
+        <Container>
           <SectionHeader
-            label="Holistic Development"
+            label="Beyond Academics"
             heading={d.leadershipHeading}
             body={d.leadershipBody}
           />
@@ -395,16 +435,16 @@ export default function SecondarySscPage() {
         </Container>
       </section>
 
-      {/* ── Career Awareness & Guidance (5 items) ── */}
-      <section className="py-16 lg:py-24 bg-white">
+      {/* ── Career Guidance (4 cards) ── */}
+      <section className="py-16 lg:py-24" style={{ background: "#f7f8fd" }}>
         <Container>
           <SectionHeader
-            label="Future Planning"
+            label="Planning Beyond SSC"
             heading={d.careerHeading}
             body={d.careerBody}
           />
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 max-w-5xl mx-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 max-w-3xl mx-auto">
             {d.careerItems.map((item) => (
               <div
                 key={item.title}
@@ -421,71 +461,8 @@ export default function SecondarySscPage() {
         </Container>
       </section>
 
-      {/* ── Student Achievements (gallery) ── */}
-      <section className="py-16 lg:py-24" style={{ background: "#f7f8fd" }}>
-        <Container>
-          <SectionHeader
-            label="Awards & Recognition"
-            heading={d.achievementsHeading}
-          />
-
-          <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
-            {d.achievementsItems.map((item, i) => (
-              <div
-                key={item.label}
-                className={`group relative rounded-2xl overflow-hidden shadow-card hover:shadow-card-lg transition-all duration-300 ${
-                  i === 0
-                    ? "col-span-2 lg:col-span-1 h-[220px] lg:h-[260px]"
-                    : "h-[180px] lg:h-[200px]"
-                }`}
-              >
-                <Image
-                  src={item.image}
-                  alt={item.label}
-                  fill
-                  className="object-cover transition-transform duration-500 group-hover:scale-105"
-                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
-                <span className="absolute bottom-3 left-4 text-sm font-semibold text-white drop-shadow">
-                  {item.label}
-                </span>
-              </div>
-            ))}
-          </div>
-        </Container>
-      </section>
-
-      {/* ── Parent Partnership (6 items) ── */}
-      <section className="py-16 lg:py-24 bg-white">
-        <Container>
-          <SectionHeader
-            label="Parent Engagement"
-            heading={d.parentHeading}
-            body={d.parentBody}
-          />
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {d.parentItems.map((item) => (
-              <div
-                key={item.title}
-                className="group flex items-start gap-4 rounded-2xl border border-slate-100 bg-white shadow-card p-6 hover:shadow-card-lg hover:-translate-y-1 transition-all duration-300"
-              >
-                <div className="flex-shrink-0 flex h-12 w-12 items-center justify-center rounded-xl bg-[#7c3aed]/10 text-[#7c3aed] group-hover:bg-[#7c3aed] group-hover:text-white transition-colors duration-200">
-                  {ICONS[item.iconKey]}
-                </div>
-                <div>
-                  <h3 className="text-[15px] font-bold text-brand-ink mb-1.5">{item.title}</h3>
-                  <p className="text-[13px] text-brand-muted leading-relaxed">{item.body}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </Container>
-      </section>
-
       {/* ── Facilities (6 icon cards) ── */}
-      <section className="py-16 lg:py-24" style={{ background: "#f7f8fd" }}>
+      <section className="py-16 lg:py-24 bg-white">
         <Container>
           <SectionHeader
             label="Campus Infrastructure"
@@ -509,11 +486,39 @@ export default function SecondarySscPage() {
         </Container>
       </section>
 
+      {/* ── Parent Partnership (6 items) ── */}
+      <section className="py-16 lg:py-24" style={{ background: "#f7f8fd" }}>
+        <Container>
+          <SectionHeader
+            label="Parents and Newton&apos;s — Full Partnership"
+            heading={d.parentHeading}
+            body={d.parentBody}
+          />
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            {d.parentItems.map((item) => (
+              <div
+                key={item.title}
+                className="group flex items-start gap-4 rounded-2xl border border-slate-100 bg-white shadow-card p-6 hover:shadow-card-lg hover:-translate-y-1 transition-all duration-300"
+              >
+                <div className="flex-shrink-0 flex h-12 w-12 items-center justify-center rounded-xl bg-[#7c3aed]/10 text-[#7c3aed] group-hover:bg-[#7c3aed] group-hover:text-white transition-colors duration-200">
+                  {ICONS[item.iconKey]}
+                </div>
+                <div>
+                  <h3 className="text-[15px] font-bold text-brand-ink mb-1.5">{item.title}</h3>
+                  <p className="text-[13px] text-brand-muted leading-relaxed">{item.body}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </Container>
+      </section>
+
       {/* ── Beyond SSC — full-width impact section ── */}
       <section className="relative overflow-hidden py-20 lg:py-28">
         <Image
-          src="/images/sections/learning-journey/secondary-ssc/watermarked_img_16940726915167875193.png"
-          alt="Newton's students — future ready"
+          src="/images/sections/learning-journey/secondary-ssc/school_poster.png"
+          alt="Newton's High School Banswada Secondary School graduates ready for Intermediate education and future careers"
           fill
           className="object-cover object-center"
           sizes="100vw"
@@ -522,19 +527,96 @@ export default function SecondarySscPage() {
         <Container className="relative z-10">
           <div className="mx-auto max-w-3xl text-center">
             <span className="mb-5 inline-block rounded-full border border-brand-orange/50 bg-brand-orange/15 px-4 py-1.5 text-[11px] font-bold uppercase tracking-widest text-brand-orange">
-              Preparing for the Future
+              Life After Newton&apos;s
             </span>
             <h2 className="text-4xl lg:text-5xl font-extrabold text-white leading-tight mb-7">
               {d.beyondHeading}
             </h2>
             <div className="mx-auto mb-8 h-px w-16 rounded-full bg-brand-orange" />
-            <p className="text-lg lg:text-xl text-white/80 leading-relaxed italic">
-              &ldquo;{d.beyondBody}&rdquo;
+            <p className="text-lg lg:text-xl text-white/80 leading-relaxed mb-8">
+              {d.beyondBody}
+            </p>
+            <p className="text-[15px] text-brand-orange/90 italic leading-relaxed">
+              &ldquo;At Newton&apos;s High School, we prepare students not just for the SSC Board Examination — but for a future that demands both knowledge and character. We are proud of every student who has carried Newton&apos;s values forward into their life beyond school.&rdquo;
+            </p>
+            <p className="mt-3 text-[13px] font-bold uppercase tracking-widest text-white/50">
+              — Newton&apos;s High School, Banswada
             </p>
           </div>
         </Container>
       </section>
 
+      {/* ── Admissions CTA ── */}
+      <section className="py-16 lg:py-20 bg-white">
+        <Container>
+          <div className="max-w-xl mx-auto text-center">
+            <span className="mb-3 inline-block text-[11px] font-bold uppercase tracking-widest text-brand-orange">
+              SSC Admissions — Banswada
+            </span>
+            <h2 className="text-3xl lg:text-4xl font-extrabold text-brand-ink mb-5 leading-tight">
+              {d.enrollHeading}
+            </h2>
+            <p className="text-[15px] text-brand-muted leading-relaxed mb-8">{d.enrollBody}</p>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-6">
+              <Button href="/admissions/enquire-now" size="lg">
+                Apply for SSC Admission
+              </Button>
+              <Button href="/admissions/how-to-apply" size="lg" variant="outline-navy">
+                Schedule a Campus Visit
+              </Button>
+            </div>
+            <p className="text-[13px] text-brand-muted">
+              Call us on{" "}
+              <a href="tel:+919866089343" className="font-semibold text-brand-navy hover:text-brand-orange transition-colors">
+                098660 89343
+              </a>{" "}
+              · Bodhan Road, Banswada, Nizamabad – 503187, Telangana
+            </p>
+          </div>
+        </Container>
+      </section>
+
+      {/* ── Continue the Journey (related stage cards) ── */}
+      <section className="py-16 lg:py-20" style={{ background: "#f7f8fd" }}>
+        <Container>
+          <div className="mb-10 text-center">
+            <span className="mb-3 inline-block text-[11px] font-bold uppercase tracking-widest text-brand-orange">
+              Explore the Full Learning Journey
+            </span>
+            <h2 className="text-2xl lg:text-3xl font-extrabold text-brand-ink">
+              Every Stage at Newton&apos;s High School, Banswada
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+            {d.relatedCards.map((card) => (
+              <Link
+                key={card.href}
+                href={card.href}
+                className="group relative h-[260px] rounded-2xl overflow-hidden shadow-card hover:shadow-card-lg transition-all duration-300 hover:-translate-y-1"
+              >
+                <Image
+                  src={card.image}
+                  alt={card.label}
+                  fill
+                  className="object-cover transition-transform duration-500 group-hover:scale-105"
+                  sizes="(max-width: 640px) 100vw, 33vw"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                <div className="absolute bottom-0 left-0 right-0 p-5">
+                  <p className="text-[11px] font-bold uppercase tracking-widest text-white/70 mb-1">{card.ages}</p>
+                  <h3 className="text-base font-extrabold text-white leading-tight">{card.label}</h3>
+                </div>
+                <div className="absolute right-4 top-4 flex h-9 w-9 items-center justify-center rounded-full bg-white/20 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4" aria-hidden>
+                    <polyline points="9 6 15 12 9 18" />
+                  </svg>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </Container>
+      </section>
     </>
   );
 }

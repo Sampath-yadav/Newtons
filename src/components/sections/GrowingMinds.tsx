@@ -30,20 +30,24 @@ export function GrowingMinds() {
         <div className="grid grid-cols-1 gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] lg:gap-12">
           {/* LEFT — headline + intro */}
           <div className="lg:pt-8">
+            <p className="mb-3 flex items-center gap-2 text-sm font-semibold text-brand-orange">
+              <span className="inline-block h-px w-5 bg-brand-orange" />
+              Our Educational Philosophy
+            </p>
             <h2
               id="growing-minds-heading"
               className="text-3xl font-bold leading-tight text-brand-ink sm:text-[36px]"
             >
-              Growing
+              Growing curious,
               <br />
-              curious,
+              disciplined,
               <br />
               confident minds
             </h2>
             <p className="mt-5 max-w-md text-[15px] leading-relaxed text-brand-navy/85">
-              As part of International Schools Partnership, every child&apos;s
-              journey is enriched with proven learning experiences that
-              forever spark curiosity and grow confidence.
+              We go beyond marks and textbooks. At Newton&apos;s, every child is
+              guided to grow in knowledge, in character, and in readiness for the
+              world ahead.
             </p>
           </div>
 

@@ -5,7 +5,7 @@ export const site = {
     phone: "+91 98660 89343",
     email: "admissions@newtonshighschool.edu.in",
     address:
-      "Newton's High School, 9VVG+26J, Banswada - Bodhan Rd, Gouse Nagar, Buswatarag Nagar, Bodhan, Banswada, Telangana 503187",
+      "Newton's High School, Bodhan Road, Buswatarag Nagar, Gouse Nagar, Banswada, Kamareddy, Telangana – 503187",
   },
   social: {
     youtube: "https://youtube.com",

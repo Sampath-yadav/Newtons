@@ -24,12 +24,19 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL(loginPath, request.url));
   }
 
+  // A disabled account may still hold a valid (not-yet-expired) JWT. Deny it at
+  // every protected route so a just-disabled user loses access on their next
+  // navigation, with a clear reason.
+  if (token.status !== "ACTIVE") {
+    return NextResponse.redirect(new URL("/access-denied?reason=disabled", request.url));
+  }
+
   // Enforce strict role separation between the two portals.
-  if (isAdminRoute && token.role !== "admin") {
+  if (isAdminRoute && token.role !== "ADMIN") {
     // A teacher must never see the admin dashboard.
     return NextResponse.redirect(new URL("/teacher/upload", request.url));
   }
-  if (pathname.startsWith("/teacher/upload") && token.role === "admin") {
+  if (pathname.startsWith("/teacher/upload") && token.role === "ADMIN") {
     // An admin belongs on the admin dashboard, not the teacher upload flow.
     return NextResponse.redirect(new URL("/admin/marks", request.url));
   }

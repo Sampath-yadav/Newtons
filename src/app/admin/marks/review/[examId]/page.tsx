@@ -103,7 +103,7 @@ export default function ReviewPage() {
 
   useEffect(() => {
     if (authStatus === "unauthenticated") router.push("/admin");
-    if (authStatus === "authenticated" && session?.user?.role !== "admin") router.push("/teacher/upload");
+    if (authStatus === "authenticated" && session?.user?.role !== "ADMIN") router.push("/teacher/upload");
   }, [authStatus, session, router]);
 
   useEffect(() => {

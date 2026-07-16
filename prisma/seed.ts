@@ -7,7 +7,6 @@
 import { PrismaClient } from "@prisma/client";
 import { Pool } from "pg";
 import { PrismaPg } from "@prisma/adapter-pg";
-import bcrypt from "bcryptjs";
 import { config } from "dotenv";
 import path from "node:path";
 import { studentPhoneGuard } from "../src/lib/student-phone-guard";
@@ -20,31 +19,37 @@ const adapter = new PrismaPg(pool);
 const prisma = new PrismaClient({ adapter }).$extends(studentPhoneGuard);
 
 async function main() {
-  const adminPassword = await bcrypt.hash("admin123", 10);
-  const teacherPassword = await bcrypt.hash("teacher123", 10);
-
-  // Admin
+  // Admin — Google-authenticated, so no local password is stored. Set
+  // ADMIN_EMAIL (and optionally ADMIN_NAME) in .env.local to bootstrap your real
+  // Google admin: that email is what authorizes admin access at sign-in.
+  const adminEmail = (process.env.ADMIN_EMAIL ?? "admin@newtons.edu.in").toLowerCase();
+  const adminName = process.env.ADMIN_NAME ?? "School Admin";
   const admin = await prisma.user.upsert({
-    where: { email: "admin@newtons.edu.in" },
-    update: {},
+    where: { email: adminEmail },
+    // Re-seeding repairs an existing row: ensure it is an ACTIVE admin and clear
+    // any stale password so the account is Google-only.
+    update: { name: adminName, role: "ADMIN", status: "ACTIVE", password: null },
     create: {
-      name: "School Admin",
-      email: "admin@newtons.edu.in",
-      password: adminPassword,
-      role: "admin",
+      name: adminName,
+      email: adminEmail,
+      role: "ADMIN",
+      status: "ACTIVE",
     },
   });
-  console.log("✅ Admin created:", admin.email);
+  console.log("✅ Admin (Google login):", admin.email);
 
-  // Teacher
+  // Teacher — Google-authenticated like admins (no password). For a real teacher
+  // to sign in, this email must be their actual Google account; otherwise add
+  // teachers through the admin Teacher Management module.
+  const teacherEmail = (process.env.TEACHER_EMAIL ?? "teacher@newtons.edu.in").toLowerCase();
   const teacher = await prisma.user.upsert({
-    where: { email: "teacher@newtons.edu.in" },
-    update: {},
+    where: { email: teacherEmail },
+    update: { role: "TEACHER", status: "ACTIVE", password: null },
     create: {
       name: "Class Teacher",
-      email: "teacher@newtons.edu.in",
-      password: teacherPassword,
-      role: "teacher",
+      email: teacherEmail,
+      role: "TEACHER",
+      status: "ACTIVE",
     },
   });
   console.log("✅ Teacher created:", teacher.email);
@@ -71,10 +76,10 @@ async function main() {
     });
   }
   console.log(`✅ ${students.length} sample students created.`);
-  console.log("\n📋 Login credentials:");
-  console.log("   Admin   → admin@newtons.edu.in   / admin123");
-  console.log("   Teacher → teacher@newtons.edu.in / teacher123");
-  console.log("   Admin portal: http://localhost:3000/admin/marks");
+  console.log("\n📋 Access:");
+  console.log(`   Admin   → ${adminEmail} (sign in with Google at /admin)`);
+  console.log(`   Teacher → ${teacherEmail} (sign in with Google at /teacher)`);
+  console.log("   Admin portal: http://localhost:3000/admin");
   console.log("   Teacher portal: http://localhost:3000/teacher");
 }
 

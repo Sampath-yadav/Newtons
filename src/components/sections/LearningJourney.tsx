@@ -30,8 +30,8 @@ export function LearningJourney() {
     >
       <Container>
         <SectionHeading
-          title="Learning journey"
-          intro="At Newton's High School, every student embarks on a meaningful learning journey rooted in academic excellence, character development, and lifelong values. Following the Telangana SSC curriculum, we provide a nurturing environment where students grow intellectually, socially, physically, and emotionally."
+          title="Every Stage of Learning, Handled with Care"
+          intro="At Newton's High School, a child's educational journey is carefully designed at every stage — from their very first day of school to the moment they walk out with their SSC results."
           align="center"
           className="mb-10 lg:mb-12"
         />

@@ -6,16 +6,45 @@ datasource db {
   provider = "postgresql"
 }
 
+// Native Postgres enums (user_role / user_status). Roles and statuses are
+// uppercase at the database level and throughout the application.
+enum UserRole {
+  ADMIN
+  TEACHER
+
+  @@map("user_role")
+}
+
+enum UserStatus {
+  ACTIVE
+  INACTIVE
+
+  @@map("user_status")
+}
+
 model User {
   id            Int            @id @default(autoincrement())
   name          String
   email         String         @unique
-  password      String
-  role          String         // "teacher" | "admin"
+  // Optional: Google-authenticated users (all admins) have no local password.
+  // Credential login (teachers, transitional) still uses this bcrypt hash.
+  password      String?
+  role          UserRole
+  // Gates login regardless of role. Disabled accounts are denied at sign-in
+  // and in middleware without being deleted.
+  status        UserStatus     @default(ACTIVE)
+  // Teacher profile fields, populated via the admin Teacher Management module.
+  subject         String?
+  assignedClass   String?
+  assignedSection String?
+  phone           String?
   createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
   exams         Exam[]
   auditLogs     AuditLog[]
   teacherAlerts TeacherAlert[]
+
+  @@index([role, status])
 }
 
 model Student {
@@ -25,10 +54,19 @@ model Student {
   class           String         // "8" | "9" | "10"
   section         String         // "A" | "B" | "C"
   parentPhone     String
+  rollNumber      String?
+  // "ACTIVE" | "INACTIVE" — deactivated students are retained (marks/history
+  // preserved) but hidden from default rosters and excluded from sends.
+  status          String         @default("ACTIVE")
   createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
   marks           Mark[]
   resultTokens    ResultToken[]
   notifications   Notification[]
+
+  // Filter-first roster: class+section is the common filter, status gates it.
+  @@index([class, section])
+  @@index([status])
 }
 
 // status: "draft" | "pending_approval" | "published" | "rejected"

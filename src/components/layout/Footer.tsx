@@ -9,8 +9,8 @@ import { SOCIAL_ICONS } from "../icons";
 /**
  * Footer
  * -------
- * Navy background, four content columns at top, social pills + ISP co-brand
- * mark at the bottom. Matches the reference layout exactly.
+ * Navy background, content columns at top, social pills + copyright /
+ * recognition line at the bottom.
  */
 export function Footer() {
   return (
@@ -98,6 +98,14 @@ export function Footer() {
             );
           })}
         </ul>
+
+        {/* Copyright + official recognition */}
+        <p className="text-xs leading-relaxed text-white/60 md:text-right">
+          © {new Date().getFullYear()} {SITE.name}, Banswada. All rights reserved.
+          <br className="hidden md:block" />{" "}
+          School Code: {SITE.schoolCode} · Recognised by the School Education
+          Department, Government of Telangana
+        </p>
       </Container>
     </footer>
   );

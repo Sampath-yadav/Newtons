@@ -87,7 +87,7 @@ export default function AdminMarksPage() {
 
   useEffect(() => {
     if (authStatus === "unauthenticated") router.push("/admin");
-    if (authStatus === "authenticated" && session?.user?.role !== "admin") router.push("/teacher/upload");
+    if (authStatus === "authenticated" && session?.user?.role !== "ADMIN") router.push("/teacher/upload");
   }, [authStatus, session, router]);
 
   async function handleApprove() {
@@ -170,6 +170,9 @@ export default function AdminMarksPage() {
           </span>
           <Link href="/admin/students" className="border-b-2 border-transparent px-3 py-3 text-[13px] font-medium text-slate-500 hover:text-slate-800 transition-colors">
             Students
+          </Link>
+          <Link href="/admin/teachers" className="border-b-2 border-transparent px-3 py-3 text-[13px] font-medium text-slate-500 hover:text-slate-800 transition-colors">
+            Teachers
           </Link>
         </div>
       </div>

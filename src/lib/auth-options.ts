@@ -1,52 +1,25 @@
 import type { NextAuthOptions } from "next-auth";
-import CredentialsProvider from "next-auth/providers/credentials";
-import bcrypt from "bcryptjs";
+import GoogleProvider from "next-auth/providers/google";
 import { prisma } from "~/lib/prisma";
 
+/**
+ * Authentication is split from authorization:
+ *  - Google proves *who* the user is (password, device, recovery and 2FA are all
+ *    owned by Google — the app never stores a password).
+ *  - The database proves *whether* they may enter: the email must map to a user
+ *    row whose status is ACTIVE. Role then decides which portal they land on.
+ *
+ * Both admins and teachers sign in exclusively through Google. There is no
+ * credential provider, no sign-up, and no password reset by design.
+ */
 export const authOptions: NextAuthOptions = {
   providers: [
-    CredentialsProvider({
-      name: "Credentials",
-      credentials: {
-        email: { label: "Email", type: "email" },
-        password: { label: "Password", type: "password" },
-      },
-      async authorize(credentials) {
-        // Logs land in the Vercel function logs, so a failing prod login can be
-        // diagnosed (wrong creds vs. DB error vs. session layer) without PII
-        // beyond the email that was attempted.
-        try {
-          if (!credentials?.email || !credentials?.password) {
-            console.warn("[auth] missing email or password");
-            return null;
-          }
-
-          const user = await prisma.user.findUnique({
-            where: { email: credentials.email },
-          });
-
-          if (!user) {
-            console.warn(`[auth] no user found for ${credentials.email}`);
-            return null;
-          }
-
-          const valid = await bcrypt.compare(credentials.password, user.password);
-          if (!valid) {
-            console.warn(`[auth] invalid password for ${credentials.email}`);
-            return null;
-          }
-
-          return {
-            id: String(user.id),
-            name: user.name,
-            email: user.email,
-            role: user.role as "teacher" | "admin",
-          };
-        } catch (e) {
-          console.error("[auth] authorize() threw:", e);
-          return null;
-        }
-      },
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID ?? "",
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? "",
+      // Let users pick which Google account to use instead of silently reusing
+      // a stale session — important on shared school machines.
+      authorization: { params: { prompt: "select_account" } },
     }),
   ],
   // 8-hour sessions (one school day). A teacher who leaves the upload page open
@@ -55,22 +28,60 @@ export const authOptions: NextAuthOptions = {
   // keeps extending them.
   session: { strategy: "jwt", maxAge: 8 * 60 * 60 },
   callbacks: {
+    // AUTHORIZATION gate. Google has proven identity; here we decide access.
+    // Returning a string redirects the user there *without* creating a session,
+    // which lets us show a precise reason (unknown vs disabled account).
+    async signIn({ user, account }) {
+      if (account?.provider !== "google") return false;
+
+      const email = user.email;
+      if (!email) return "/access-denied?reason=unauthorized";
+
+      const dbUser = await prisma.user.findFirst({
+        where: { email: { equals: email, mode: "insensitive" } },
+        select: { status: true },
+      });
+
+      if (!dbUser) {
+        console.warn(`[auth] sign-in denied — no account for ${email}`);
+        return "/access-denied?reason=unauthorized";
+      }
+      if (dbUser.status !== "ACTIVE") {
+        console.warn(`[auth] sign-in denied — disabled account ${email}`);
+        return "/access-denied?reason=disabled";
+      }
+      return true;
+    },
+    // Persist our DB identity into the token. We resolve role/status straight
+    // from the database on initial sign-in (when `user` is present) rather than
+    // trusting the provider profile — Google has no role. The token is set once
+    // and reused until it expires, so this DB read only happens at login.
     async jwt({ token, user }) {
-      if (user) {
-        token.id = user.id;
-        token.role = (user as { role: "teacher" | "admin" }).role;
+      const email = user?.email ?? token.email;
+      if (user && email) {
+        const dbUser = await prisma.user.findFirst({
+          where: { email: { equals: email, mode: "insensitive" } },
+        });
+        if (dbUser) {
+          token.id = String(dbUser.id);
+          token.role = dbUser.role;
+          token.status = dbUser.status;
+        }
       }
       return token;
     },
     async session({ session, token }) {
-      if (token) {
-        (session.user as { id?: string; role?: string }).id = token.id as string;
-        (session.user as { id?: string; role?: string }).role = token.role as string;
+      if (token && session.user) {
+        session.user.id = token.id;
+        session.user.role = token.role;
+        session.user.status = token.status;
       }
       return session;
     },
   },
-  pages: { signIn: "/teacher" },
+  // signIn is the default Google surface; denied OAuth sign-ins land on the
+  // shared access-denied page (the signIn callback redirects there with a reason).
+  pages: { signIn: "/teacher", error: "/access-denied" },
   secret: process.env.NEXTAUTH_SECRET,
   // Force secure, prefixed cookies in production regardless of the NEXTAUTH_URL
   // protocol, so the session cookie behaves correctly behind Vercel's HTTPS.

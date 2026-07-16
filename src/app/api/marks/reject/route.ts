@@ -4,7 +4,7 @@ import { prisma } from "~/lib/prisma";
 
 export async function POST(request: NextRequest) {
   const token = await getToken({ req: request, secret: process.env.NEXTAUTH_SECRET });
-  if (!token || token.role !== "admin") {
+  if (!token || token.role !== "ADMIN") {
     return NextResponse.json({ error: "Admin access required." }, { status: 403 });
   }
 

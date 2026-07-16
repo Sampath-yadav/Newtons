@@ -22,8 +22,8 @@ interface HeroProps {
  */
 export function Hero({
   videoSrc = "/videos/hero/campus.mp4",
-  title = "Knowledge, Perseverance & Excellence",
-  subtitle = "Growing the world's most curious, confident minds",
+  title = "Where Every Child Discovers Their True Potential",
+  subtitle = "Shaping disciplined, confident, and academically strong students — right here in the heart of Banswada.",
 }: HeroProps) {
   // The hero video is large, so only load it on connections that can afford it.
   // Data-saver / 2G–3G visitors get the branded gradient hero instead — saving
@@ -65,6 +65,9 @@ export function Hero({
 
       {/* Overlay content */}
       <Container className="absolute inset-0 flex flex-col items-center justify-center text-center text-white">
+        <span className="mb-4 inline-block rounded-full border border-white/30 bg-white/10 px-4 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-white/90 backdrop-blur-sm sm:text-xs">
+          Quality Education · Character · Excellence
+        </span>
         <h1 className="font-display text-4xl font-bold leading-tight drop-shadow-md sm:text-5xl lg:text-[56px]">
           {title}
         </h1>
@@ -73,11 +76,11 @@ export function Hero({
         </p>
 
         <div className="mt-7 flex flex-wrap items-center justify-center gap-3">
-          <Button href="/our-school/why-choose-us" size="lg">
-            Why choose us
+          <Button href="/our-school" size="lg">
+            Explore Our School
           </Button>
           <Button href="/contact#enquiry" variant="outline-light" size="lg">
-            Book a tour
+            Book a Campus Tour
           </Button>
         </div>
       </Container>

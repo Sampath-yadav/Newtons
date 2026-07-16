@@ -42,12 +42,13 @@ export const WELCOME_FEATURES: WelcomeFeature[] = [
   {
     id: "ssc-curriculum",
     icon: LibraryBig,
-    title: "Quality SSC Education",
+    title: "Strong SSC Academic Foundation",
     body: (
       <>
-        We follow the Telangana SSC curriculum with a focus on concept clarity,
-        discipline and regular assessments to build a strong academic foundation
-        for every student.
+        Our teaching follows the Telangana SSC curriculum with a focus on concept
+        clarity rather than rote memorisation. Regular assessments, revision
+        cycles, and structured practice help students build the strong academic
+        base they need to succeed in board examinations and beyond.
       </>
     ),
     theme: {
@@ -62,12 +63,13 @@ export const WELCOME_FEATURES: WelcomeFeature[] = [
   {
     id: "academic-excellence",
     icon: Award,
-    title: "Academic Excellence",
+    title: "Results-Focused Academic Guidance",
     body: (
       <>
-        Our dedicated teachers inspire students to achieve their highest
-        potential through personalized attention, continuous practice and a
-        results-driven approach.
+        From Grade 1 through Grade 10, our teachers use proven, personalised
+        teaching strategies tailored to each student&apos;s pace and learning
+        style. We track progress consistently and step in early whenever a
+        student needs additional support — because no child should be left behind.
       </>
     ),
     theme: {
@@ -82,12 +84,13 @@ export const WELCOME_FEATURES: WelcomeFeature[] = [
   {
     id: "holistic-development",
     icon: Sparkles,
-    title: "Holistic Student Development",
+    title: "Whole-Child Development",
     body: (
       <>
-        We go beyond academics to nurture confident, responsible and
-        well-rounded individuals through sports, cultural activities, life skills
-        and leadership opportunities.
+        Education at Newton&apos;s is never limited to textbooks and exams.
+        Students participate in sports, arts, cultural programmes, environmental
+        drives, and life skills workshops that shape them into responsible,
+        confident, and well-rounded individuals ready for life beyond school.
       </>
     ),
     theme: {
@@ -102,12 +105,13 @@ export const WELCOME_FEATURES: WelcomeFeature[] = [
   {
     id: "faculty-mentorship",
     icon: UserRoundCheck,
-    title: "Experienced Faculty & Mentorship",
+    title: "Experienced & Caring Faculty",
     body: (
       <>
-        Our dedicated teachers provide personalized guidance, continuous support,
-        and effective learning strategies that help students build confidence,
-        improve performance, and achieve their academic goals.
+        Our teachers bring subject expertise, classroom experience, and genuine
+        commitment to every lesson. Each student receives personal mentorship,
+        academic counselling, and continuous encouragement — creating a positive
+        environment where students feel motivated to learn and grow every day.
       </>
     ),
     theme: {
@@ -122,12 +126,14 @@ export const WELCOME_FEATURES: WelcomeFeature[] = [
   {
     id: "sports-cocurricular",
     icon: Medal,
-    title: "Sports & Co-Curricular Activities",
+    title: "Sports, Arts & Leadership Activities",
     body: (
       <>
-        Students are encouraged to participate in sports, arts, cultural events,
-        and leadership programs that promote teamwork, creativity, discipline,
-        and overall personality development.
+        We believe that what happens outside the classroom shapes a child just as
+        powerfully as what happens inside it. Students at Newton&apos;s actively
+        participate in inter-school competitions, annual cultural events, sports
+        days, and leadership programmes that build teamwork, creativity, and
+        self-confidence.
       </>
     ),
     theme: {

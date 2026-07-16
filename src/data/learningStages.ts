@@ -20,8 +20,8 @@ export const LEARNING_STAGES: LearningStage[] = [
     imageSrc: "/images/sections/learning-journey/_stage-cards/pre-primary.png",
     imageAlt: "Pre-Primary students at Newton's High School",
     title: "Pre-Primary",
-    ageRange: "Ages 3–5 Years",
-    body: "Young learners begin their educational journey in a caring and joyful environment. Through play-based learning, storytelling, creative activities, and language development, children build confidence, curiosity, and essential foundational skills.",
+    ageRange: "Ages 3–5",
+    body: "We welcome the youngest learners into a warm, cheerful classroom environment where curiosity is celebrated. Children discover language, numbers, colours, and creativity through play-based activities, storytelling, rhymes, and hands-on exploration — building confidence, friendships, and a genuine love of learning from the very beginning.",
     href: "/learning-journey/pre-primary",
   },
   {
@@ -30,7 +30,7 @@ export const LEARNING_STAGES: LearningStage[] = [
     imageAlt: "Primary students in class at Newton's High School",
     title: "Primary School",
     ageRange: "Grades 1–5",
-    body: "Students develop strong academic fundamentals while exploring creativity, communication, and teamwork. Our engaging classrooms encourage active learning and independent thinking.",
+    body: "Students build strong academic fundamentals in Telugu, Hindi, English, Mathematics, and Environmental Science. Active classroom discussions, group activities, and regular reading practice ensure children develop both knowledge and communication skills — nurturing independent thinking alongside a team-first attitude.",
     href: "/learning-journey/primary-school",
   },
   {
@@ -39,16 +39,16 @@ export const LEARNING_STAGES: LearningStage[] = [
     imageAlt: "Upper Primary students at Newton's High School",
     title: "Upper Primary School",
     ageRange: "Grades 6–8",
-    body: "Students strengthen subject knowledge while developing leadership, responsibility, and problem-solving skills. They actively participate in projects, competitions, and cultural activities that build confidence and teamwork.",
+    body: "This is where students begin to develop a deeper sense of responsibility, analytical thinking, and academic confidence. Subject knowledge becomes more structured as students prepare for higher studies, while leadership opportunities, project-based learning, and school events help them build a strong personal identity alongside academic achievement.",
     href: "/learning-journey/upper-primary-school",
   },
   {
     id: "secondary-school",
     imageSrc: "/images/sections/learning-journey/_stage-cards/secondary.png",
     imageAlt: "Secondary students at Newton's High School",
-    title: "Secondary School",
+    title: "Secondary School — SSC",
     ageRange: "Grades 9–10",
-    body: "Students receive focused academic guidance aligned with the Telangana SSC curriculum. Experienced teachers provide structured preparation, helping students achieve outstanding board examination results and future success.",
+    body: "Our Secondary School programme is specifically designed to deliver outstanding SSC Board Examination results for every student. With experienced subject teachers, targeted practice papers, timed assessments, and individual progress tracking, students are fully prepared — academically and mentally — to face their board exams with confidence and clarity.",
     href: "/learning-journey/secondary-school",
   },
   {
@@ -57,7 +57,7 @@ export const LEARNING_STAGES: LearningStage[] = [
     imageAlt: "Students participating in sports and cultural activities at Newton's High School",
     title: "Holistic Student Development",
     ageRange: "Beyond Academics",
-    body: "Education at Newton's High School extends beyond textbooks. Students participate in sports, cultural events, arts, leadership activities, and community engagement programs that shape confident, responsible, and well-rounded individuals.",
+    body: "Newton's believes that education is only complete when students grow as full human beings. Throughout all stages, students take part in sports, arts, cultural celebrations, environmental awareness campaigns, and community activities that build character, empathy, and a lifelong sense of responsibility.",
     href: "/learning-journey/holistic-development",
   },
 ];

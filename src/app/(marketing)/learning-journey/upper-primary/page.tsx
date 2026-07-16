@@ -1,13 +1,21 @@
 import type { ReactNode } from "react";
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "~/components/ui/Button";
 import { Container } from "~/components/layout/Container";
-import { ImageFrame } from "~/components/ui/ImageFrame";
 import { StageNav } from "~/components/learning-journey/StageNav";
 import { CurriculumTabs } from "~/components/learning-journey/CurriculumTabs";
 import { UPPER_PRIMARY_SCHOOL } from "~/data/learning-journey";
 import type { IconKey } from "~/data/learning-journey";
+
+export const metadata: Metadata = {
+  title: "Upper Primary School Banswada | Classes 6–8 | Newton's High School Telangana",
+  description:
+    "Newton's High School, Banswada offers a strong Upper Primary programme for Classes 6 to 8. Concept-based SSC learning, leadership development, trilingual communication, and co-curricular activities in a disciplined, caring campus in Nizamabad, Telangana.",
+  keywords:
+    "Upper Primary School Banswada, Classes 6 7 8 School Banswada, Middle School SSC Telangana, Newton's High School Banswada, Best School Nizamabad Classes 6 to 8, SSC Preparation Banswada",
+};
 
 /* ── Icon lookup (all 12 keys) ──────────────────────────────────────────── */
 
@@ -102,38 +110,35 @@ export default function UpperPrimaryPage() {
 
   return (
     <>
-      {/* ── Hero (split: text left · image-frame right) ── */}
-      <section className="relative overflow-hidden bg-brand-navy">
-        <div className="pointer-events-none absolute -right-24 -top-24 h-96 w-96 rounded-full bg-brand-orange/20 blur-3xl" />
-        <div className="pointer-events-none absolute -bottom-32 left-1/3 h-80 w-80 rounded-full bg-[#3b46c4]/30 blur-3xl" />
-        <Container className="relative grid grid-cols-1 items-center gap-10 py-14 lg:grid-cols-2 lg:gap-16 lg:py-24">
-          <div>
-            <span className="inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.18em] text-brand-orange">
-              <span className="h-px w-5 bg-brand-orange/50" />
-              {d.agesLabel}
-            </span>
-            <h1 className="mt-5 text-4xl font-extrabold leading-[1.08] text-white lg:text-[3.5rem]">
-              Upper Primary<br />
-              <span className="text-brand-orange">School</span>
-            </h1>
-            <p className="mt-4 text-[15px] font-semibold italic leading-relaxed text-brand-orange/90 lg:text-base">
-              {d.heroTagline}
-            </p>
-            <p className="mt-4 max-w-md text-[16px] leading-relaxed text-white/75 lg:text-[17px]">
-              {d.heroDescription}
-            </p>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <Button href="/admissions/enquire-now" size="lg">Enquire Now</Button>
-              <Button href="/admissions/how-to-apply" size="lg" variant="outline-light">Book a Campus Visit</Button>
+      {/* ── Hero ── */}
+      <section className="relative h-[460px] lg:h-[560px] overflow-hidden">
+        <Image
+          src={d.heroImage}
+          alt="Upper Primary students at Newton's High School Banswada engaged in a concept-based learning discussion — Classes 6 to 8"
+          fill
+          className="object-cover object-center"
+          priority
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#060C8B]/90 via-[#060C8B]/60 to-transparent" />
+        <div className="absolute inset-0 flex items-end lg:items-center pb-12 lg:pb-0">
+          <Container>
+            <div className="max-w-lg">
+              <span className="mb-4 inline-block rounded-full border border-brand-orange/50 bg-brand-orange/15 px-3 py-1 text-[11px] font-bold uppercase tracking-widest text-brand-orange">
+                {d.agesLabel}
+              </span>
+              <h1 className="text-3xl lg:text-5xl font-extrabold text-white leading-tight mb-4">
+                {d.heroTagline}
+              </h1>
+              <p className="text-base lg:text-lg text-white/80 mb-8 leading-relaxed">
+                {d.heroDescription}
+              </p>
+              <div className="flex flex-wrap gap-3">
+                <Button href="/admissions/enquire-now" size="lg">Enquire Now</Button>
+                <Button href="/admissions/how-to-apply" size="lg" variant="outline-light">Book a Campus Visit</Button>
+              </div>
             </div>
-          </div>
-          <ImageFrame
-            src={d.heroImage}
-            label="Hero Image"
-            tone="orange"
-            className="h-[300px] w-full shadow-2xl shadow-black/30 ring-1 ring-white/10 lg:h-[440px]"
-          />
-        </Container>
+          </Container>
+        </div>
       </section>
 
       {/* ── Stage navigation ── */}
@@ -223,7 +228,7 @@ export default function UpperPrimaryPage() {
         <Container>
           <div className="max-w-2xl mx-auto text-center mb-12">
             <span className="mb-3 inline-block text-[11px] font-bold uppercase tracking-widest text-brand-orange">
-              Practical Learning
+              Practical Learning at Newton&apos;s
             </span>
             <h2 className="text-3xl lg:text-4xl font-extrabold text-brand-ink mb-4">
               {d.activitiesHeading}
@@ -248,6 +253,34 @@ export default function UpperPrimaryPage() {
                 <div className="absolute bottom-0 left-0 right-0 p-5">
                   <h3 className="text-[15px] font-bold text-white leading-snug">{activity.label}</h3>
                 </div>
+              </div>
+            ))}
+          </div>
+        </Container>
+      </section>
+
+      {/* ── Newton's Real Activities (Section 7) ── */}
+      <section className="py-16 lg:py-24 bg-white">
+        <Container>
+          <div className="max-w-2xl mx-auto text-center mb-12">
+            <span className="mb-3 inline-block text-[11px] font-bold uppercase tracking-widest text-brand-orange">
+              Newton&apos;s School Life — What Makes Us Different
+            </span>
+            <h2 className="text-3xl lg:text-4xl font-extrabold text-brand-ink mb-4">
+              {d.schoolActivitiesHeading}
+            </h2>
+            <p className="text-[15px] text-brand-muted leading-relaxed">{d.schoolActivitiesBody}</p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            {d.schoolActivities.map((item) => (
+              <div
+                key={item.title}
+                className="group rounded-2xl border border-slate-100 bg-white shadow-card p-7 hover:shadow-card-lg hover:-translate-y-1 transition-all duration-300"
+              >
+                <div className="mb-4 text-3xl">{item.icon}</div>
+                <h3 className="text-base font-bold text-brand-ink mb-3">{item.title}</h3>
+                <p className="text-sm text-brand-muted leading-relaxed">{item.body}</p>
               </div>
             ))}
           </div>
@@ -472,6 +505,78 @@ export default function UpperPrimaryPage() {
                 <h3 className="text-base font-bold text-brand-ink mb-2">{card.title}</h3>
                 <p className="text-sm text-brand-muted leading-relaxed">{card.body}</p>
               </div>
+            ))}
+          </div>
+        </Container>
+      </section>
+
+      {/* ── Admissions CTA ── */}
+      <section className="py-16 lg:py-20 bg-white">
+        <Container>
+          <div className="max-w-xl mx-auto text-center">
+            <span className="mb-3 inline-block text-[11px] font-bold uppercase tracking-widest text-brand-orange">
+              Upper Primary Admissions — Banswada
+            </span>
+            <h2 className="text-3xl lg:text-4xl font-extrabold text-brand-ink mb-5 leading-tight">
+              {d.enrollHeading}
+            </h2>
+            <p className="text-[15px] text-brand-muted leading-relaxed mb-8">{d.enrollBody}</p>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-6">
+              <Button href="/admissions/enquire-now" size="lg">
+                Apply for Upper Primary Admission
+              </Button>
+              <Button href="/admissions/how-to-apply" size="lg" variant="outline-navy">
+                Book a Campus Visit
+              </Button>
+            </div>
+            <p className="text-[13px] text-brand-muted">
+              Call us on{" "}
+              <a href="tel:+919866089343" className="font-semibold text-brand-navy hover:text-brand-orange transition-colors">
+                098660 89343
+              </a>{" "}
+              · Bodhan Road, Banswada, Nizamabad – 503187, Telangana
+            </p>
+          </div>
+        </Container>
+      </section>
+
+      {/* ── Continue the Journey (related stage cards) ── */}
+      <section className="py-16 lg:py-20" style={{ background: "#f7f8fd" }}>
+        <Container>
+          <div className="mb-10 text-center">
+            <span className="mb-3 inline-block text-[11px] font-bold uppercase tracking-widest text-brand-orange">
+              Continue the Learning Journey
+            </span>
+            <h2 className="text-2xl lg:text-3xl font-extrabold text-brand-ink">
+              Explore Every Stage at Newton&apos;s High School, Banswada
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+            {d.relatedCards.map((card) => (
+              <Link
+                key={card.href}
+                href={card.href}
+                className="group relative h-[260px] rounded-2xl overflow-hidden shadow-card hover:shadow-card-lg transition-all duration-300 hover:-translate-y-1"
+              >
+                <Image
+                  src={card.image}
+                  alt={card.label}
+                  fill
+                  className="object-cover transition-transform duration-500 group-hover:scale-105"
+                  sizes="(max-width: 640px) 100vw, 33vw"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                <div className="absolute bottom-0 left-0 right-0 p-5">
+                  <p className="text-[11px] font-bold uppercase tracking-widest text-white/70 mb-1">{card.ages}</p>
+                  <h3 className="text-base font-extrabold text-white leading-tight">{card.label}</h3>
+                </div>
+                <div className="absolute right-4 top-4 flex h-9 w-9 items-center justify-center rounded-full bg-white/20 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4" aria-hidden>
+                    <polyline points="9 6 15 12 9 18" />
+                  </svg>
+                </div>
+              </Link>
             ))}
           </div>
         </Container>

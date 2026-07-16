@@ -48,14 +48,15 @@ export function WhatMakesGreat() {
             id="what-makes-great-heading"
             className="text-[40px] font-extrabold leading-tight tracking-tight text-brand-ink sm:text-[52px] lg:text-[64px]"
           >
-            What makes Newton&apos;s great?
+            What Makes Newton&apos;s High School Truly Special
           </h2>
           {/* Orange accent underline */}
           <div className="mx-auto mt-4 h-1 w-24 rounded-full bg-brand-orange" />
           <p className="mx-auto mt-6 max-w-3xl text-lg leading-relaxed text-brand-muted sm:text-xl">
-            Hear how passionate educators guide every student to excel,{" "}
+            The real story of Newton&apos;s is told best by the people who
+            experience it every day —{" "}
             <span className="font-semibold text-brand-orange">
-              shaping confident leaders, academic achievers and future-ready minds.
+              our Principal, our teachers, our parents, and our students.
             </span>
           </p>
         </div>

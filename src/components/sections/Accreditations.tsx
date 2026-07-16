@@ -10,20 +10,20 @@ import Image from "next/image";
 // ─── Data (move to src/data/accreditations.ts if you prefer) ─────────────────
 const ACCREDITATIONS = [
   {
-    id: "telangana",
-    name: "Government of Telangana — School Education Department",
+    id: "ssc-board",
+    name: "Telangana State Board of Secondary Education",
     logo: "/images/accreditations/rte-compliance.png",
     width: 150,
     height: 150,
-    caption: "Recognized by the School Education Department, Government of Telangana",
+    caption: "Affiliated to the Telangana State Board, delivering the SSC curriculum from Kindergarten to Grade 10",
   },
   {
     id: "rte",
-    name: "Right to Education (RTE) Compliance",
+    name: "Right to Education (RTE) Act Compliance",
     logo: "/images/accreditations/telangana-government-recognition.png",
     width: 180,
     height: 180,
-    caption: "Committed to the principles of the Right to Education Act",
+    caption: "Fully committed to inclusive, accessible education as mandated by the Right to Education Act of India",
   },
 ];
 
@@ -37,16 +37,24 @@ export function Accreditations() {
       <div className="mx-auto max-w-6xl px-6 sm:px-10 lg:px-16">
 
         {/* Section heading */}
+        <p className="mb-2 text-center text-[12px] font-semibold uppercase tracking-[0.15em] text-brand-orange">
+          Official Recognition
+        </p>
         <h2
           id="accreditations-heading"
-          className="text-center font-bold mb-10 text-gray-800"
+          className="text-center font-bold text-gray-800"
           style={{
             fontFamily: "var(--font-heading, 'Playfair Display', Georgia, serif)",
             fontSize: "clamp(1.35rem, 2.5vw, 1.875rem)",
           }}
         >
-          Accreditations
+          Accreditations &amp; Recognitions
         </h2>
+        <p className="mx-auto mb-10 mt-3 max-w-xl text-center text-[13px] leading-relaxed text-gray-500">
+          Recognised by the School Education Department, Government of Telangana
+          <span className="mx-1.5 text-gray-300">·</span>
+          School Code 36150701951
+        </p>
 
         {/* Logo strip */}
         <div

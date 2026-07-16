@@ -30,11 +30,11 @@ export function WelcomeFeatures() {
         <div className="mb-10 max-w-2xl lg:mb-14">
           <p className="mb-3 flex items-center gap-2 text-sm font-semibold text-brand-orange">
             <span className="inline-block h-px w-5 bg-brand-orange" />
-            Nurturing Minds. Building Futures.
+            Why Families Choose Us
           </p>
           <SectionHeading
-            title="Welcome to Newton's High School"
-            intro="A place where students learn, grow and excel. We are committed to providing quality education, values and opportunities for a brighter tomorrow."
+            title="Five Reasons Newton's High School Stands Apart"
+            intro="We do not just teach subjects. We build character, confidence, and competence in every child who walks through our doors."
             align="left"
           />
         </div>

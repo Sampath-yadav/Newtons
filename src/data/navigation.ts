@@ -44,7 +44,7 @@ export const MEGA_MENUS: MegaMenuConfig[] = [
   {
     key: "admissions",
     label: "Admissions",
-    subtitle: "Enrol with ease",
+    subtitle: "Join Our School",
     href: "/admissions",
     description:
       "Everything parents need to know about joining Newton's High School.",
@@ -57,7 +57,7 @@ export const MEGA_MENUS: MegaMenuConfig[] = [
   {
     key: "our-school",
     label: "Our school",
-    subtitle: "Discover us & the campus",
+    subtitle: "Campus & Faculty",
     href: "/our-school",
     description:
       "Discover Newton's High School — our values, campus, and educational approach.",
@@ -70,7 +70,7 @@ export const MEGA_MENUS: MegaMenuConfig[] = [
   {
     key: "school-life",
     label: "School life",
-    subtitle: "Where confidence grows",
+    subtitle: "Beyond the Classroom",
     href: "/school-life",
     description:
       "Explore the experiences, opportunities, and activities that shape student life.",
@@ -84,7 +84,7 @@ export const MEGA_MENUS: MegaMenuConfig[] = [
   {
     key: "whats-on",
     label: "What's on",
-    subtitle: "Discover what's happening",
+    subtitle: "Events & Updates",
     href: "/whats-on",
     description:
       "Stay updated with the latest news, events, and happenings at Newton's High School.",
@@ -147,11 +147,12 @@ export const SITE = {
   name: "Newton's High School",
   tagline: "Where Confidence Grows",
   address: {
-    line1: "9VVG+26J, Banswada - Bodhan Rd, Gouse Nagar,",
-    line2: "Buswatarag Nagar, Bodhan, Banswada,",
-    line3: "Telangana 503187",
+    line1: "Bodhan Road, Buswatarag Nagar, Gouse Nagar,",
+    line2: "Banswada, Kamareddy,",
+    line3: "Telangana – 503187",
   },
   phones: ["098660 89343"],
+  schoolCode: "36150701951",
   social: [
     { id: "youtube", href: "https://youtube.com" },
     { id: "instagram", href: "https://instagram.com" },

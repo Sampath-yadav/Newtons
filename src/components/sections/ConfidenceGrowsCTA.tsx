@@ -30,7 +30,7 @@ export default function ConfidenceGrowsCTA() {
 
           {/* Label pill */}
           <span className="inline-block w-fit rounded-full border border-brand-orange/40 bg-white/10 px-3.5 py-1 text-[11px] font-semibold uppercase tracking-widest text-brand-orange sm:px-4 sm:text-xs">
-            Newton&apos;s High School
+            Newton&apos;s High School · Banswada
           </span>
 
           {/* Heading */}
@@ -38,14 +38,14 @@ export default function ConfidenceGrowsCTA() {
             id="cta-heading"
             className="text-[28px] font-bold leading-[1.15] text-white sm:text-4xl lg:text-[2.6rem]"
           >
-            Where confidence grows
+            Give Your Child the Education They Deserve
           </h2>
 
           {/* Body */}
           <p className="max-w-md text-[15px] leading-relaxed text-white/75 sm:text-base">
-            Discover how Newton&apos;s High School empowers students to lead
-            their learning through Cambridge and SSC programmes, build skills
-            and access top universities around the world.
+            Discover how Newton&apos;s High School prepares students from Banswada
+            and Kamareddy to face their board exams, embrace their culture, and
+            step into the future with genuine confidence and character.
           </p>
 
           {/* CTA */}

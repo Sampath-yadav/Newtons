@@ -3,6 +3,7 @@
 // Homepage — all 8 sections assembled in order.
 // ─────────────────────────────────────────────────────────────────────────────
 
+import type { Metadata } from "next";
 import Hero from "~/components/sections/Hero";
 import WelcomeFeatures from "~/components/sections/WelcomeFeatures";
 import LearningJourney from "~/components/sections/LearningJourney";
@@ -11,6 +12,12 @@ import AdmissionsJourney from "~/components/sections/AdmissionsJourney";
 import WhatMakesGreat from "~/components/sections/WhatMakesGreat";
 import ConfidenceGrowsCTA from "~/components/sections/ConfidenceGrowsCTA";
 import Accreditations from "~/components/sections/Accreditations";
+
+export const metadata: Metadata = {
+  title: "Newton's High School Banswada | Best SSC School in Kamareddy, Telangana",
+  description:
+    "Newton's High School, Banswada offers quality SSC education from Pre-Primary to Grade 10. Experienced faculty, value-based learning, and a safe campus. Enquire for admissions today.",
+};
 
 export default function HomePage() {
   return (

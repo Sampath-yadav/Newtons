@@ -5,31 +5,31 @@ import { useState } from "react";
 const ITEMS = [
   {
     title: "Fee Payment Policy",
-    body: "Annual school fees can be paid as a single lump sum or in two equal installments at the start of each term. All fees must be cleared before the commencement of the academic term. Late payment may attract additional administrative charges.",
+    body: "Newton's High School collects school fees on an annual basis. Fee payment schedules and accepted payment methods are confirmed at the time of your child's admission. Parents are requested to ensure fees are paid by the due dates communicated by the school to avoid any disruption to their child's education. For any queries about fee payment timing or methods, please contact the Newton's school office directly on 098660 89343.",
   },
   {
     title: "Transportation Fee",
-    body: "The school bus facility is available at ₹13,000 per academic year, billed separately from the academic fee. Transportation routes cover key localities in and around the school's service area. Students using the bus facility are required to maintain punctuality and conduct.",
+    body: "The annual bus fee of ₹13,000 applies only to students who choose to use Newton's school bus service. This fee is collected separately from the school tuition fee and is confirmed at the time of registration for the bus service. Specific bus route details, stops, and daily timings are communicated to registered families at the beginning of each academic year. Families who arrange their own transportation are not charged this fee.",
   },
   {
-    title: "Uniforms & Textbooks",
-    body: "School uniforms, textbooks, notebooks, and stationery are not included in the annual academic fee and must be purchased separately. A comprehensive list of required items will be provided at the time of admission and at the start of each academic year.",
+    title: "Uniforms and Textbooks",
+    body: "School uniforms, prescribed textbooks, notebooks, and stationery items are not included in Newton's annual school fee. Families are responsible for purchasing these items separately. A complete list of required books and the school uniform specifications is provided to every family at the time of admission confirmation. The Newton's school office can advise parents on local suppliers for both uniform items and prescribed books.",
   },
   {
     title: "Student Activities",
-    body: "Participation in sports, cultural programs, annual day celebrations, science exhibitions, and inter-school competitions may involve nominal additional charges depending on the activity and the level of participation. Parents will be informed well in advance.",
+    body: "Participation in Newton's standard school-wide activities and events — including Vana Mahotsavam, annual sports day, cultural celebrations, Teachers' Day, and inter-class competitions — is included within the school fee for all students. Families are not charged separately for these events. Should any optional external educational activity or special programme be organised during the academic year, full details and any associated costs will be communicated to parents clearly and in advance.",
   },
   {
     title: "Admission Guidelines",
-    body: "Admission to all classes is subject to seat availability and fulfilment of the prescribed age and academic criteria. Fresh admissions require a completed application form, previous school records, and a personal interaction with the admissions team at Newton's High School.",
+    body: "Admission to Newton's High School is subject to seat availability in the relevant class at the time of application. We accept admission enquiries and applications throughout the academic year. Admission is confirmed upon successful completion of the admission process, submission of all required documents, and payment of the applicable school fee. For full guidance on the admission process and required documents, please speak directly with our admissions team or visit Newton's High School, Bodhan Road, Banswada.",
   },
   {
     title: "Refund Policy",
-    body: "The registration and admission fees are non-refundable once processed. Annual academic fees are refundable on a pro-rata basis only if a withdrawal request is submitted before the commencement of the academic term. No refunds will be processed after the academic term has begun.",
+    body: "Fee refund requests are reviewed individually in accordance with Newton's school refund guidelines. Families seeking information about refund eligibility — for example, in the case of a student withdrawing during the academic year — should contact the school office directly. Applicable refund conditions and timelines are communicated clearly at the time of any such request. The school office will handle all refund enquiries promptly and with care.",
   },
   {
-    title: "Fee Benefits & Concessions",
-    body: "Sibling discounts, merit-based scholarships, and need-based fee concessions are available for eligible students. Parents seeking fee benefits are requested to contact the admissions office with supporting documentation. All concessions are subject to availability and management approval.",
+    title: "Fee Concessions and Benefits",
+    body: "Newton's High School is committed to ensuring that financial circumstances do not prevent deserving students from accessing quality education in Banswada. Fee concession options may be available to eligible students in specific circumstances. Families who wish to enquire about concessions are encouraged to speak directly and confidentially with the school Principal or the admissions team. All concession requests are handled with genuine care, complete discretion, and respect for the family's privacy.",
   },
 ];
 

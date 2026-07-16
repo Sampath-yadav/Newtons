@@ -5,9 +5,9 @@ const ACCREDITATIONS = [
     id: "sed-telangana",
     shortName: "Govt. of Telangana",
     icon: "🏛️",
-    name: "Recognition from the School Education Department, Government of Telangana",
+    name: "Government of Telangana — School Education Department",
     description:
-      "Newton's High School is recognized by the School Education Department, Government of Telangana, and operates in accordance with the academic standards, policies, and regulations prescribed for recognized educational institutions in the state.",
+      "Newton's High School, Banswada (School Code: 36150701951) is recognised by the School Education Department, Government of Telangana. The school operates in full compliance with the academic standards, policies, and regulations prescribed for recognised educational institutions across Telangana State.",
     accent: "#16a34a",
     bg: "#f0fdf4",
     border: "#bbf7d0",
@@ -16,9 +16,9 @@ const ACCREDITATIONS = [
     id: "rte",
     shortName: "RTE Compliant",
     icon: "📋",
-    name: "Right to Education (RTE) Compliance",
+    name: "Right to Education (RTE) Act Compliant",
     description:
-      "The school is committed to the principles of the Right to Education (RTE) Act, promoting accessible, equitable, and quality education while maintaining a safe, inclusive, and student-focused learning environment.",
+      "Newton's High School is fully committed to the principles of the Right to Education Act — delivering accessible, equitable, and quality education in a safe, inclusive, and student-centred learning environment for every child enrolled in our school in Banswada, Nizamabad.",
     accent: "#2563eb",
     bg: "#eff6ff",
     border: "#bfdbfe",

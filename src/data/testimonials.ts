@@ -24,18 +24,18 @@ export const TESTIMONIALS: Testimonial[] = [
     id: "principal",
     imageSrc: "/images/people/Principal.png",
     quote:
-      "At Newton's High School, we believe in celebrating the unique individuality of each child and fostering the growth of their innate talents.",
+      "At Newton's High School, we do not measure success only in marks. We measure it in the confidence a child walks out with, the values they carry forward, and the readiness they have built for the challenges of life. Every student here matters to us — not as a number, but as an individual with a unique future ahead of them.",
     authorName: "Surjeet Singh",
-    authorRole: "Principal",
+    authorRole: "Principal, Newton's High School",
     chipRole: "Principal",
-    linkLabel: "Meet our team",
+    linkLabel: "Meet Our Team",
     href: "/about#team",
   },
   {
     id: "student",
     imageSrc: "/images/people/Student-1.png",
     quote:
-      "Newton's High School gave me the confidence to speak on stage, lead a team, and think for myself. I feel genuinely prepared for whatever comes next.",
+      "My teachers at Newton's never gave up on me. Even when I found Maths difficult, they stayed back after class and explained every problem patiently. I scored much better in my exams than I expected, and I feel genuinely ready for my future.",
     authorName: "Aarav Mehta",
     authorRole: "Grade 11 Student",
     chipRole: "Student",
@@ -46,7 +46,7 @@ export const TESTIMONIALS: Testimonial[] = [
     id: "parent-1",
     imageSrc: "/images/people/parent-1.webp",
     quote:
-      "The communication between teachers and parents is exceptional. We always feel like partners in our child's learning journey.",
+      "We chose Newton's because of its reputation in Banswada for discipline and results. Three years later, we have no doubt that it was the right decision. Our daughter has grown academically and personally beyond what we imagined.",
     authorName: "Ramesh Nair",
     authorRole: "Parent — Grade 6",
     chipRole: "Parent",
@@ -57,7 +57,7 @@ export const TESTIMONIALS: Testimonial[] = [
     id: "teacher",
     imageSrc: "/images/people/teacher-1.png",
     quote:
-      "Teaching at Newton's High School means having the freedom and support to innovate. Every day, I see students grow beyond what they thought possible.",
+      "Teaching at Newton's is deeply rewarding. The school gives us the freedom and the support to teach meaningfully — not just to cover the syllabus, but to genuinely connect with students and help each one understand and enjoy the subject.",
     authorName: "Priya Krishnan",
     authorRole: "Cambridge Science Faculty",
     chipRole: "Teacher",
@@ -68,7 +68,7 @@ export const TESTIMONIALS: Testimonial[] = [
     id: "parent-2",
     imageSrc: "/images/people/parent-2.jpg",
     quote:
-      "Shifting from overseas, we were anxious about the transition. The Newton's High School team made our daughter feel at home from day one.",
+      "What I appreciate most is that the school communicates with us regularly. I always know how my son is doing — his attendance, his marks, his behaviour. That level of transparency and involvement is rare and it means everything to a parent.",
     authorName: "Sunita Verma",
     authorRole: "Parent — Grade 3, International Admission",
     chipRole: "Parent",
@@ -79,7 +79,7 @@ export const TESTIMONIALS: Testimonial[] = [
     id: "teacher-2",
     imageSrc: "/images/people/teacher-2.jpg",
     quote:
-      "What sets Newton's High School apart is how deeply the school cares about holistic development — not just marks, but character, creativity, and confidence.",
+      "Newton's High School has a culture that values both students and teachers. Professional development is encouraged, student welfare is taken seriously, and every day I feel that the work I do here truly makes a difference.",
     authorName: "Ananya Reddy",
     authorRole: "Head of Arts & Humanities",
     chipRole: "Teacher",
